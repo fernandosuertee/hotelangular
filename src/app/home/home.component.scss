@@ -1,0 +1,89 @@
+/* Background e ajuste de cor do texto */
+body {
+  background-color: #f7f7f9;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+/* Navbar com tons pastel */
+.navbar {
+  background-color: #a9d1d9;
+}
+.navbar-brand, .nav-link {
+  color: #333 !important;
+}
+.navbar-brand:hover, .nav-link:hover {
+  color: #555 !important;
+}
+
+/* Footer estilizado com cor complementar */
+footer {
+  background-color: #a9d1d9;
+  color: #333;
+  font-size: 0.9rem;
+}
+
+/* Estilo dos cards */
+.card {
+  border-radius: 8px;
+}
+
+.card-body h5 {
+  color: #333;
+}
+
+body {
+  font-family: Arial, sans-serif;
+}
+
+.navbar-brand {
+  font-size: 1.5rem;
+}
+
+.card {
+  border-radius: 8px;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+footer {
+  font-size: 0.9rem;
+  color: #ccc;
+}
+
+  footer {
+    color: #333; /* Cor mais escura para o texto */
+    background-color: #e3e4df; /* Cor de fundo já usada */
+    font-size: 14px; /* Tamanho do texto */
+  }
+  html, body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+.container {
+    flex: 1;
+}
+
+footer {
+    background-color: #e3e4df;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px;
+    margin-top: auto;
+}
+

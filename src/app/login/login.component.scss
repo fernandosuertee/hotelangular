@@ -1,0 +1,32 @@
+.container {
+    max-width: 100%;
+    padding: 15px;
+}
+.col-md-6, .col-lg-4 {
+    padding: 0 15px;
+}
+
+/* Cor de fundo da página toda, incluindo navbar e rodapé */
+body,  footer {
+    background-color: #e3e4df; /* Cor cinza clara */
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+  }
+
+  .bg-image img {
+    max-width: 80%; /* reduz o tamanho da imagem */
+    height: auto; /* mantém a proporção */
+  }
+
+  /* Cor de fundo branca para os campos de entrada */
+  .form-control {
+    background-color: #ffffff !important; /* Branco */
+    border: 1px solid #ccc; /* Borda sutil */
+    color: #000; /* Cor do texto */
+  }
+
+  /* Estilo do botão para centralizar e padronizar */
+  .btn-primary {
+    background-color: #0056b3; /* Azul personalizado */
+    color: #fff;
+  }
