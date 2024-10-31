@@ -1,23 +1,17 @@
+
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './login/login.component';
-import { RegistrarComponent } from './registrar/registrar.component';
-import { HomeComponent } from './home/home.component';
-import { CadastrarHotelComponent } from './cadastrar-hotel/cadastrar-hotel.component';
-import { CadastrarUsuarioComponent } from './cadastrar-usuario/cadastrar-usuario.component';
-import { CadastrarReservaComponent } from './cadastrar-reserva/cadastrar-reserva.component';
-import { CadastrarQuartoComponent } from './cadastrar-quarto/cadastrar-quarto.component';
 
 const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'registrar', component: RegistrarComponent },
-  { path: 'home', component: HomeComponent },
-  { path: 'cadastrar-hotel', component: CadastrarHotelComponent },
-  { path: 'cadastrar-usuario', component: CadastrarUsuarioComponent },
-  { path: 'cadastrar-reserva', component: CadastrarReservaComponent },
-  { path: 'cadastrar-quarto', component: CadastrarQuartoComponent },
-  { path: '', redirectTo: '/login', pathMatch: 'full' },
-  { path: '**', redirectTo: '/login' }
+  { path: 'login', loadComponent: () => import('./login/login.component').then(m => m.LoginComponent) },
+  { path: 'registrar', loadComponent: () => import('./registrar/registrar.component').then(m => m.RegistrarComponent) },
+  { path: 'home', loadComponent: () => import('./home/home.component').then(m => m.HomeComponent) },
+  { path: 'cadastrar-hotel', loadComponent: () => import('./cadastrar-hotel/cadastrar-hotel.component').then(m => m.CadastrarHotelComponent) },
+  { path: 'cadastrar-usuario', loadComponent: () => import('./cadastrar-usuario/cadastrar-usuario.component').then(m => m.CadastrarUsuarioComponent) },
+  { path: 'cadastrar-reserva', loadComponent: () => import('./cadastrar-reserva/cadastrar-reserva.component').then(m => m.CadastrarReservaComponent) },
+  { path: 'cadastrar-quarto', loadComponent: () => import('./cadastrar-quarto/cadastrar-quarto.component').then(m => m.CadastrarQuartoComponent) },
+  { path: '', redirectTo: '/login', pathMatch: 'full' }, // Rota padrão
+  { path: '**', redirectTo: '/login' } // Rota curinga
 ];
 
 @NgModule({

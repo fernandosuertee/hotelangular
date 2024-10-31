@@ -86,4 +86,86 @@ footer {
     padding: 15px;
     margin-top: auto;
 }
+/* Define altura total para html e body */
+html, body {
+  height: 100%;
+  margin: 0;
+}
 
+/* Configura o body como um contêiner flexível */
+body {
+  display: flex;
+  flex-direction: column;
+}
+
+/* Permite que o container cresça para ocupar o espaço disponível */
+.container {
+  flex: 1 0 auto;
+}
+
+/* Estilização do footer */
+footer {
+  background-color: #e3e4df;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  padding: 15px;
+}
+
+/* Define que o body ocupa toda a altura da tela */
+body {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  background-color: #f7f7f9;
+  color: #333;
+  font-family: Arial, sans-serif;
+}
+
+/* O container principal ocupa o espaço disponível */
+.container {
+  flex: 1;
+}
+
+/* Estilos do footer */
+footer {
+  background-color: #a9d1d9;
+  color: #333;
+  font-size: 0.9rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 15px;
+}
+
+/* Outros estilos permanecem os mesmos */
+.navbar {
+  background-color: #a9d1d9;
+}
+
+.navbar-brand, .nav-link {
+  color: #333 !important;
+}
+
+.navbar-brand:hover, .nav-link:hover {
+  color: #555 !important;
+}
+
+.card {
+  border-radius: 8px;
+}
+
+.card-body h5 {
+  color: #333;
+}
+
+.card-body {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.card-title {
+  font-size: 1.3rem;
+  font-weight: bold;
+}

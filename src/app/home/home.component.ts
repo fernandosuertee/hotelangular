@@ -1,16 +1,11 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { RouterModule } from '@angular/router';  // Importe o RouterModule
 
 @Component({
   selector: 'app-home',
   standalone: true,
+  imports: [RouterModule],  // Adicione o RouterModule aqui
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']
 })
-export class HomeComponent {
-  constructor(private router: Router) {}
-
-  navigateTo(path: string): void {
-    this.router.navigate([path]);
-  }
-}
+export class HomeComponent {}

@@ -1,15 +1,15 @@
+// login.component.ts
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [],
+  imports: [RouterModule, FormsModule],
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.scss']  
+  styleUrls: ['./login.component.scss']
 })
-
-
 export class LoginComponent {
   constructor(private router: Router) {}
 
