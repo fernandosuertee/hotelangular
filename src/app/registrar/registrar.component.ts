@@ -1,4 +1,3 @@
-// registrar.component.ts
 import { Component } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -11,7 +10,7 @@ import { FormsModule } from '@angular/forms';
   styleUrls: ['./registrar.component.scss']
 })
 export class RegistrarComponent {
-  constructor(private router: Router) {}
+  constructor(private router: Router) { }
 
   navigateTo(route: string) {
     this.router.navigate([`/${route}`]);

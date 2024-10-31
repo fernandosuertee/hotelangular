@@ -1,10 +1,10 @@
-// app.config.ts
 import { ApplicationConfig } from '@angular/core';
 import { provideRouter, Routes } from '@angular/router';
+import { RegistrarComponent } from './registrar/registrar.component';
 
 const routes: Routes = [
   { path: 'login', loadComponent: () => import('./login/login.component').then(m => m.LoginComponent) },
-  { path: 'registrar', loadComponent: () => import('./registrar/registrar.component').then(m => m.RegistrarComponent) },
+  { path: 'registrar',component: RegistrarComponent },
   { path: 'home', loadComponent: () => import('./home/home.component').then(m => m.HomeComponent) },
   { path: 'cadastrar-hotel', loadComponent: () => import('./cadastrar-hotel/cadastrar-hotel.component').then(m => m.CadastrarHotelComponent) },
   { path: 'cadastrar-usuario', loadComponent: () => import('./cadastrar-usuario/cadastrar-usuario.component').then(m => m.CadastrarUsuarioComponent) },
