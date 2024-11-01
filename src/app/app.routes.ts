@@ -1,9 +1,10 @@
 import { Routes } from '@angular/router';
+import { LoginComponent } from './login/login.component';
 
 export const appRoutes: Routes = [
   {
     path: 'login',
-    loadComponent: () => import('./login/login.component').then(c => c.LoginComponent)
+    component: LoginComponent
   },
   {
     path: 'registrar',
