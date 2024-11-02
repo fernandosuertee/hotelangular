@@ -2,7 +2,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service'; // Ajuste o caminho se necessário
+import { AuthService } from '../../services/auth.service'; 
 
 @Component({
   selector: 'app-login',
@@ -15,7 +15,7 @@ export class LoginComponent {
   login: string = '';
   senha: string = '';
   isAdminLogin: boolean = false;
-  isLoading: boolean = false; // Define o isLoading
+  isLoading: boolean = false;
 
   constructor(private router: Router, private authService: AuthService) {}
 
@@ -35,12 +35,10 @@ export class LoginComponent {
       return;
     }
 
-    // Inicia o carregamento
     this.isLoading = true;
 
-    // Simulação do login com tempo para carregamento
     setTimeout(() => {
-      this.isLoading = false; // Finaliza o carregamento
+      this.isLoading = false; 
       if (this.isAdminLogin && this.login === 'admin@gmail.com' && this.senha === 'admin') {
         alert('Login de administrador bem-sucedido!');
         this.authService.setUserRole('admin');
@@ -52,6 +50,6 @@ export class LoginComponent {
       } else {
         alert('Usuário ou senha incorretos.');
       }
-    }, 2000); // Tempo de 2 segundos para simular carregamento
+    }, 2000); 
   }
 }

@@ -13,7 +13,7 @@ export const appRoutes: Routes = [
   { path: 'registrar', component: RegistrarComponent },
   { path: 'home', component: HomeComponent },
   { path: 'cadastrar-reserva', component: CadastrarReservaComponent },
-  { path: 'cadastrar-hotel', component: CadastrarHotelComponent, canActivate: [AdminGuard] },
+  { path: 'cadastrar-hotel', component: CadastrarHotelComponent, canActivate: [AdminGuard]},
   { path: 'cadastrar-quarto', component: CadastrarQuartoComponent, canActivate: [AdminGuard] },
   { path: '**', redirectTo: 'login', pathMatch: 'full' },
 ];
