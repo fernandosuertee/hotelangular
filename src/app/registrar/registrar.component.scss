@@ -1,88 +1,26 @@
-.container {
-    max-width: 100%;
-    padding: 15px;
-  }
-  .col-md-6, .col-lg-4 {
-    padding: 0 15px;
-  }
-  body, footer {
-    background-color: #e3e4df;
-    margin: 0;
-    font-family: 'Roboto', sans-serif;
-  }
-  .bg-image img {
-    max-width: 80%;
-    height: auto;
-  }
-  .form-control {
-    background-color: #ffffff !important;
-    border: 1px solid #ccc;
-    color: #000;
-  }
-  .btn-primary {
-    background-color: #0056b3;
-    color: #fff;
-  }
-
-  /* Define altura total para html e body */
-html, body {
-  height: 100%;
-  margin: 0;
-}
-
-/* Configura o body como um contêiner flexível */
-body {
-  display: flex;
-  flex-direction: column;
-}
-
-/* Permite que o container cresça para ocupar o espaço disponível */
-.container {
-  flex: 1 0 auto;
-}
-
-/* Estilização do footer */
-footer {
-  background-color: #e3e4df;
-  color: #333;
-  font-weight: bold;
-  text-align: center;
-  padding: 15px;
-}
-/* Define que o html e body ocupam toda a altura da tela */
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-}
-
-/* Configura o body como flex container */
-body {
+.main-container {
+  height: 100vh;
   display: flex;
   flex-direction: column;
   font-family: 'Roboto', sans-serif;
   background-color: #e3e4df;
 }
 
-/* O container principal ocupa o espaço disponível */
+
 .container {
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: center; /* Centraliza verticalmente */
-  align-items: center; /* Centraliza horizontalmente */
-}
-
-/* Estilos do footer */
-footer {
-  background-color: #e3e4df;
-  color: #333;
-  font-weight: bold;
-  text-align: center;
+  justify-content: center; 
+  align-items: center; 
+  max-width: 100%;
   padding: 15px;
 }
 
-/* Outros estilos */
+.col-md-6, .col-lg-4 {
+  padding: 0 15px;
+}
+
 .bg-image img {
   max-width: 80%;
   height: auto;
@@ -99,3 +37,50 @@ footer {
   color: #fff;
 }
 
+.form-outline {
+  position: relative;
+  margin-bottom: 1rem;
+
+  .form-control {
+    border: 1px solid #ccc;
+    padding: 0.5rem 0.75rem;
+    background-color: #ffffff;
+    color: #000;
+    font-size: 1rem;
+  }
+
+  .form-label {
+    position: absolute;
+    top: 0.5rem;
+    left: 0.75rem;
+    font-size: 1rem;
+    color: #777;
+    transition: all 0.3s ease;
+    pointer-events: none;
+  }
+
+  /* Quando o input está preenchido ou em foco */
+  .form-control:focus + .form-label,
+  .form-control:not(:placeholder-shown) + .form-label {
+    top: -0.75rem;
+    left: 0.5rem;
+    font-size: 0.75rem;
+    color: #333;
+    background-color: #fff;
+    padding: 0 0.25rem;
+  }
+}
+
+
+
+.footer {
+  background-color: #e3e4df;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  padding: 15px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}

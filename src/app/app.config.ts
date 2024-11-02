@@ -1,25 +1,12 @@
 import { ApplicationConfig } from '@angular/core';
-import { provideRouter, Routes } from '@angular/router';
-import { RegistrarComponent } from './registrar/registrar.component';
-import { LoginComponent } from './login/login.component';
-import { HomeComponent } from './home/home.component';
-import { CadastrarHotelComponent } from './cadastrar-hotel/cadastrar-hotel.component';
-import { CadastrarUsuarioComponent } from './cadastrar-usuario/cadastrar-usuario.component';
-import { CadastrarReservaComponent } from './cadastrar-reserva/cadastrar-reserva.component';
-import { CadastrarQuartoComponent } from './cadastrar-quarto/cadastrar-quarto.component';
-
-const routes: Routes = [
-  { path: 'login', component: LoginComponent },
-  { path: 'registrar',component: RegistrarComponent },
-  { path: 'home', component: HomeComponent },
-  { path: 'cadastrar-hotel', component: CadastrarHotelComponent},
-  { path: 'cadastrar-usuario', component: CadastrarUsuarioComponent },
-  { path: 'cadastrar-reserva', component: CadastrarReservaComponent },
-  { path: 'cadastrar-quarto', component: CadastrarQuartoComponent },
-  { path: '', redirectTo: '/login', pathMatch: 'full' }, 
-  { path: '**', redirectTo: '/login' } 
-];
+import { provideRouter } from '@angular/router';
+import { provideZoneChangeDetection } from '@angular/core';
+import { appRoutes } from './app.routes';
+import { provideClientHydration } from '@angular/platform-browser';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
-  providers: [provideRouter(routes)]
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),provideRouter(appRoutes),provideClientHydration(),provideAnimations()
+  ]
 };
