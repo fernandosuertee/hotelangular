@@ -7,13 +7,14 @@ import { CadastrarUsuarioComponent } from './cadastrar-usuario/cadastrar-usuario
 import { CadastrarReservaComponent } from './cadastrar-reserva/cadastrar-reserva.component';
 import { CadastrarQuartoComponent } from './cadastrar-quarto/cadastrar-quarto.component';
 import { AdminComponent } from './admin/admin.component';
-import { UserComponent } from './user/user.component';
 
 export const appRoutes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
   { path: 'registrar', component: RegistrarComponent },
-  { path: 'home', component: HomeComponent },
+  { path: 'home', component: HomeComponent },  // Página inicial do atendente
+
+  // Rota para o admin, com suas funcionalidades
   {
     path: 'admin',
     component: AdminComponent,
@@ -24,13 +25,6 @@ export const appRoutes: Routes = [
       { path: 'cadastrar-quarto', component: CadastrarQuartoComponent }
     ]
   },
-  {
-    path: 'user',
-    component: UserComponent,  
-    children: [
-      { path: 'perfil', component: RegistrarComponent },  
-      { path: 'reservas', component: CadastrarReservaComponent },  
-    ]
-  },
+
   { path: '**', redirectTo: 'login', pathMatch: 'full' }
 ];

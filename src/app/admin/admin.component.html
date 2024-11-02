@@ -1,1 +1,74 @@
-<p>admin works!</p>
+
+<nav class="navbar navbar-expand-lg">
+    <a class="navbar-brand mx-auto" href="#">
+        <img src="assets/reservafacil.png" alt="Reserva Fácil" class="navbar-logo" />
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+</nav>
+
+<div class="background-container">
+<div class="container mt-5">
+    <div class="text-center mb-4">
+        <h2 class="text-muted">Bem-vindo ao Reserva Fácil!</h2>
+        <p class="lead">Gerencie facilmente quartos, reservas e clientes do hotel.</p>
+    </div>
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card mb-4 shadow-sm" style="background-color: #f9ebea;">
+                <img src="assets/cadusuario.jpeg" class="card-img-top" alt="Cadastrar Pessoa">
+                <div class="card-body">
+                    <h5 class="card-title">Cadastrar Usuário</h5>
+                    <p class="card-text">Registre novos clientes no sistema para facilitar as reservas.</p>
+                    <button [routerLink]="['/cadastrar-usuario']" class="btn btn-block" style="background-color: #fadbd8; color: #333;">
+                        Acessar
+                      </button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-4 shadow-sm" style="background-color: #e8f8f5;">
+                <img src="assets/cadhotel.jpeg" class="card-img-top" alt="Cadastrar Hotel">
+                <div class="card-body">
+                    <h5 class="card-title">Cadastrar Hotel</h5>
+                    <p class="card-text">Adicione novos hotéis e mantenha as informações atualizadas.</p>
+                    <button [routerLink]="['/cadastrar-hotel']" class="btn btn-block" style="background-color: #d1f2eb; color: #333;">
+                        Acessar
+                      </button>                
+                 </div>
+            </div>
+        </div>
+
+        <!-- Card: Cadastrar Quarto -->
+        <div class="col-md-3">
+            <div class="card mb-4 shadow-sm" style="background-color: #fcf3cf;">
+                <img src="assets/cadquarto.jpeg" class="card-img-top" alt="Cadastrar Quarto">
+                <div class="card-body">
+                    <h5 class="card-title">Cadastrar Quarto</h5>
+                    <p class="card-text">Adicione novos quartos e atualize as informações de disponibilidade.</p>
+                    <button [routerLink]="['/cadastrar-quarto']" class="btn btn-block" style="background-color: #fef9e7; color: #333;">
+                        Acessar
+                      </button>                
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card mb-4 shadow-sm" style="background-color: #f4ecf7;">
+                <img src="assets/cadreserva.jpeg" class="card-img-top" alt="Cadastrar Reserva">
+                <div class="card-body">
+                    <h5 class="card-title">Cadastrar Reserva</h5>
+                    <p class="card-text">Gerencie reservas de clientes de forma prática e rápida.</p>
+                    <button [routerLink]="['/cadastrar-reserva']" class="btn btn-block" style="background-color: #f5eef8; color: #333;">
+                        Acessar
+                      </button>            
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+
+
+<footer class="footer">
+    © 2024 Reserva Fácil. Todos os direitos reservados.
+</footer>

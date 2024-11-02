@@ -32,14 +32,17 @@ export class LoginComponent {
       return;
     }
 
+    // Verifica se o login é de administrador com as credenciais 'admin@gmail.com'/'admin'
     if (this.isAdminLogin && this.login === 'admin@gmail.com' && this.senha === 'admin') {
       alert('Login de administrador bem-sucedido!');
       this.router.navigate(['admin']);
     } 
+    // Verifica o login de atendente (usuario) com credenciais 'usuario@gmail.com'/'usuario'
     else if (!this.isAdminLogin && this.login === 'usuario@gmail.com' && this.senha === 'usuario') {
-      alert('Login de usuário bem-sucedido!');
+      alert('Login de atendente bem-sucedido!');
       this.router.navigate(['home']);
     } 
+    // Caso as credenciais estejam incorretas
     else {
       alert('Usuário ou senha incorretos.');
     }
