@@ -1,0 +1,51 @@
+<div class="main-container">
+    <div class="container d-flex justify-content-center mt-5">
+      <div class="col-md-6 col-lg-4">
+        <div class="bg-image hover-overlay ripple">
+          <a href="#" target="_blank">
+            <img src="assets/reservafacil.png" alt="Reserva Fácil" class="img-fluid" />
+          </a>
+        </div>
+  
+        <!-- Formulário de Cadastro de Quarto -->
+        <div class="form-outline mb-4">
+          <input type="text" [(ngModel)]="numero" id="numeroInput" class="form-control" placeholder=" " required />
+          <label class="form-label" for="numeroInput">Número do Quarto</label>
+        </div>
+  
+        <div class="form-outline mb-4">
+          <input type="text" [(ngModel)]="tipo" id="tipoInput" class="form-control" placeholder=" " required />
+          <label class="form-label" for="tipoInput">Tipo do Quarto</label>
+        </div>
+  
+        <div class="form-outline mb-4">
+          <input type="text" [(ngModel)]="status" id="statusInput" class="form-control" placeholder=" " required />
+          <label class="form-label" for="statusInput">Status do Quarto</label>
+        </div>
+  
+        <!-- Seleção de Hotel -->
+        <div class="form-outline mb-4">
+          <label for="hotelSelect" class="form-label">Selecionar Hotel</label>
+          <select [(ngModel)]="hotelSelecionado" id="hotelSelect" class="form-control" required>
+            <option *ngFor="let hotel of hoteis" [value]="hotel.id">{{ hotel.nome }}</option>
+          </select>
+        </div>
+  
+        <!-- Ícone de carregamento -->
+        <div *ngIf="isLoading" class="d-flex justify-content-center mb-4">
+          <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Carregando...</span>
+          </div>
+        </div>
+  
+        <button type="button" class="btn btn-primary btn-block mb-4" (click)="cadastrarQuarto()" [disabled]="isLoading">
+          Cadastrar Quarto
+        </button>
+      </div>
+    </div>
+  
+    <footer class="footer">
+      © 2024 Reserva Fácil. Todos os direitos reservados.
+    </footer>
+  </div>
+  
