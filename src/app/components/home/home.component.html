@@ -1,12 +1,14 @@
-
 <nav class="navbar navbar-expand-lg">
+  <div class="container d-flex justify-content-between align-items-center">
     <a class="navbar-brand mx-auto" href="#">
-        <img src="assets/reservafacil.png" alt="Reserva Fácil" class="navbar-logo" />
+      <img src="assets/reservafacil.png" alt="Reserva Fácil" class="navbar-logo" />
     </a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
+    <button class="nav-link btn logout-btn" (click)="logout()">
+      <i class="fas fa-sign-out-alt"></i> Sair
     </button>
+  </div>
 </nav>
+
 
 <div class="background-container">
 <div class="container mt-5">
@@ -58,8 +60,56 @@
                 </div>
             </div>
         </div>
+
+        <!-- Card: Gerenciar Clientes -->
+      <div class="col-md-3">
+        <div class="card mb-4 shadow-sm" style="background-color: #e6e6fa;">
+          <img src="assets/gerenciarClientes.jpeg" class="card-img-top" alt="Gerenciar Clientes">
+          <div class="card-body">
+            <h5 class="card-title">Gerenciar Clientes</h5>
+            <p class="card-text">Visualize e edite informações dos clientes.</p>
+            <button class="btn btn-block" style="background-color: #d8bfd8; color: #333;" (click)="navigateTo('gerenciar-cliente')">Acessar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card: Gerenciar Hotel (Apenas para Admin) -->
+      <div class="col-md-3" *ngIf="isAdmin">
+        <div class="card mb-4 shadow-sm" style="background-color: #e8f8f5;">
+          <img src="assets/gerenciar-hotel.jpeg" class="card-img-top" alt="Gerenciar Hotel">
+          <div class="card-body">
+            <h5 class="card-title">Gerenciar Hotel</h5>
+            <p class="card-text">Gerencie as informações do hotel.</p>
+            <button class="btn btn-block" style="background-color: #d1f2eb; color: #333;" (click)="navigateTo('gerenciar-hotel')">Acessar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card: Gerenciar Quarto (Apenas para Admin) -->
+      <div class="col-md-3" *ngIf="isAdmin">
+        <div class="card mb-4 shadow-sm" style="background-color: #fcf3cf;">
+          <img src="assets/gerenciar-quarto.jpeg" class="card-img-top" alt="Gerenciar Quarto">
+          <div class="card-body">
+            <h5 class="card-title">Gerenciar Quarto</h5>
+            <p class="card-text">Gerencie os quartos disponíveis no hotel.</p>
+            <button class="btn btn-block" style="background-color: #fef9e7; color: #333;" (click)="navigateTo('gerenciar-quarto')">Acessar</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card: Gerenciar Reserva -->
+      <div class="col-md-3">
+        <div class="card mb-4 shadow-sm" style="background-color: #f4ecf7;">
+          <img src="assets/gerenciar-reserva.jpeg" class="card-img-top" alt="Gerenciar Reserva">
+          <div class="card-body">
+            <h5 class="card-title">Gerenciar Reserva</h5>
+            <p class="card-text">Gerencie as reservas dos clientes.</p>
+            <button class="btn btn-block" style="background-color: #fadbd8; color: #333;" (click)="navigateTo('gerenciar-reserva')">Acessar</button>
+          </div>
+        </div>
+      </div>
     </div>
-    
+    </div>
 </div>
 
 
