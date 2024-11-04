@@ -1,1 +1,54 @@
-<p>gerenciar-reserva works!</p>
+<div class="main-container">
+    <div class="container d-flex justify-content-center mt-5">
+      <div class="col-md-6 col-lg-4">
+        <div class="bg-image hover-overlay ripple">
+          <a href="#" target="_blank">
+            <img src="assets/reservafacil.png" alt="Reserva Fácil" class="img-fluid" />
+          </a>
+        </div>
+  
+        <!-- Opções de Gerenciamento de Reservas -->
+        <div class="mt-4">
+          <h4 class="text-center mb-3">Gerenciar Reservas</h4>
+  
+          <!-- Campo de busca por ID -->
+          <div class="form-outline mb-3">
+            <input type="text" id="searchInput" class="form-control" placeholder="Buscar reserva por ID" [(ngModel)]="reservaId" />
+            <button class="btn btn-primary mt-2 w-100" (click)="buscarReserva()">Buscar Reserva</button>
+          </div>
+  
+          <!-- Listagem de todas as reservas -->
+          <div *ngIf="reservas && reservas.length" class="reservas-list mt-3">
+            <h5 class="text-center">Todas as Reservas</h5>
+            <ul class="list-group">
+              <li *ngFor="let reserva of reservas" class="list-group-item d-flex justify-content-between align-items-center">
+                <span>ID: {{ reserva.id }} - {{ reserva.status }}</span>
+                <div>
+                  <button class="btn btn-outline-primary btn-sm" (click)="selecionarReserva(reserva)">Visualizar</button>
+                  <button class="btn btn-outline-warning btn-sm" (click)="atualizarReserva(reserva)">Atualizar</button>
+                  <button class="btn btn-outline-danger btn-sm" (click)="deletarReserva(reserva.id)">Excluir</button>
+                </div>
+              </li>
+            </ul>
+          </div>
+  
+          <!-- Detalhes da reserva selecionada -->
+          <div *ngIf="reservaSelecionada" class="reserva-detalhes mt-3">
+            <h5>Detalhes da Reserva</h5>
+            <p>ID: {{ reservaSelecionada.id }}</p>
+            <p>Hóspede: {{ reservaSelecionada.hospede.nome }}</p>
+            <p>Hotel: {{ reservaSelecionada.hotel.nome }}</p>
+            <p>Quarto: {{ reservaSelecionada.quarto.numero }}</p>
+            <p>Data Check-In: {{ reservaSelecionada.dataCheckIn | date }}</p>
+            <p>Data Check-Out: {{ reservaSelecionada.dataCheckOut | date }}</p>
+            <p>Status: {{ reservaSelecionada.status }}</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  
+    <footer class="footer">
+      © 2024 Reserva Fácil. Todos os direitos reservados.
+    </footer>
+  </div>
+  

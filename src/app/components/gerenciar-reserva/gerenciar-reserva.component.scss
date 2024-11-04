@@ -1,0 +1,51 @@
+.main-container {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    font-family: 'Roboto', sans-serif;
+    background-color: #e3e4df;
+    padding-bottom: 60px;
+  }
+  
+  .container {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 100%;
+    padding: 15px;
+    margin-top: 60px;
+  }
+  
+  .reservas-list {
+    width: 100%;
+  }
+  
+  .list-group-item {
+    background-color: #ffffff;
+    border: 1px solid #ccc;
+  }
+  
+  .footer {
+    background-color: #e3e4df;
+    color: #333;
+    font-weight: bold;
+    text-align: center;
+    padding: 15px;
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+  }
+  
+  .navbar {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+    background-color: #f8f9fa;
+    padding: 10px 15px;
+    border-bottom: 1px solid #ccc;
+  }
+  
