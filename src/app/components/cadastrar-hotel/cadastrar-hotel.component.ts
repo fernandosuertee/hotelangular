@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 interface Hotel {
+  id: number;
   nome: string;
   endereco: string;
   descricao: string;
@@ -26,6 +27,13 @@ export class CadastrarHotelComponent {
 
   constructor(private router: Router) {}
 
+  gerarIdHotel(): number {
+    const hoteisExistentes = JSON.parse(localStorage.getItem('hoteis') || '[]');
+    return hoteisExistentes.length > 0
+      ? hoteisExistentes[hoteisExistentes.length - 1].id + 1
+      : 1;
+  }
+
   cadastrarHotel() {
     if (!this.nome || !this.endereco || !this.descricao || this.numeroDeQuartos <= 0) {
       alert('Por favor, preencha todos os campos corretamente.');
@@ -38,6 +46,7 @@ export class CadastrarHotelComponent {
       this.isLoading = false;
 
       const novoHotel: Hotel = {
+        id: this.gerarIdHotel(),
         nome: this.nome,
         endereco: this.endereco,
         descricao: this.descricao,

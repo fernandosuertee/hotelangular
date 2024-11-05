@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
@@ -7,9 +7,6 @@ interface Reserva {
   hospedeId: number;
   hotelId: number;
   quartoId: number;
-  hospede: string;
-  hotel: string;
-  quarto: string;
   dataCheckIn: string;
   dataCheckOut: string;
   numHospedes: number;
@@ -21,13 +18,17 @@ interface Reserva {
   standalone: true,
   imports: [FormsModule, CommonModule],
   templateUrl: './gerenciar-reserva.component.html',
-  styleUrls: ['./gerenciar-reserva.component.scss']
+  styleUrls: ['./gerenciar-reserva.component.scss'],
 })
-export class GerenciarReservaComponent {
+export class GerenciarReservaComponent implements OnInit {
   reservaId: number | null = null;
   isLoading: boolean = false;
   reservas: Reserva[] = [];
   reservaSelecionada: Reserva | null = null;
+
+  hospedes: any[] = [];
+  hoteis: any[] = [];
+  quartos: any[] = [];
 
   // Modais de controle
   showEditModal = false;
@@ -44,19 +45,70 @@ export class GerenciarReservaComponent {
     status: '',
     hotel: { id: 0 },
     quarto: { id: 0 },
-    hospede: { id: 0 }
+    hospede: { id: 0 },
   };
 
-  constructor() {
-    // Dados simulados para as reservas
-    this.reservas = [
-      { id: 1, hospedeId: 1, hotelId: 1, quartoId: 101, hospede: 'João Silva', hotel: 'Hotel A', quarto: '101', dataCheckIn: '2024-11-10', dataCheckOut: '2024-11-15', numHospedes: 2, status: 'Confirmada' },
-      { id: 2, hospedeId: 2, hotelId: 2, quartoId: 202, hospede: 'Maria Oliveira', hotel: 'Hotel B', quarto: '202', dataCheckIn: '2024-11-12', dataCheckOut: '2024-11-16', numHospedes: 1, status: 'Pendente' },
-    ];
+  constructor() {}
+
+  ngOnInit(): void {
+    this.carregarReservas();
+    this.carregarHospedes();
+    this.carregarHoteis();
+    this.carregarQuartos();
   }
 
+  carregarReservas() {
+    this.reservas = JSON.parse(localStorage.getItem('reservas') || '[]');
+  }
+
+  carregarHospedes() {
+    this.hospedes = JSON.parse(localStorage.getItem('clientes') || '[]');
+  }  
+
+  carregarHoteis() {
+    this.hoteis = JSON.parse(localStorage.getItem('hoteis') || '[]');
+  }
+
+  carregarQuartos() {
+    this.quartos = JSON.parse(localStorage.getItem('quartos') || '[]');
+  }
+
+  obterNomeHospede(hospedeId: number | undefined): string {
+    if (hospedeId === undefined) {
+      return 'Desconhecido';
+    }
+    const hospede = this.hospedes.find((h: any) => h.id === hospedeId);
+    return hospede ? hospede.nome : 'Desconhecido';
+  }
+
+  obterEmailHospede(hospedeId: number | undefined): string {
+    if (hospedeId === undefined) {
+      return 'Desconhecido';
+    }
+    const hospede = this.hospedes.find((h: any) => h.id === hospedeId);
+    return hospede ? hospede.email : 'Desconhecido';
+  }
+
+  obterNomeHotel(hotelId: number | undefined): string {
+    if (hotelId === undefined) {
+      return 'Desconhecido';
+    }
+    const hotel = this.hoteis.find((h: any) => h.id === hotelId);
+    return hotel ? hotel.nome : 'Desconhecido';
+  }
+
+  obterNumeroQuarto(quartoId: number | undefined): string {
+    if (quartoId === undefined) {
+      return 'Desconhecido';
+    }
+    const quarto = this.quartos.find((q: any) => q.id === quartoId);
+    return quarto ? quarto.numero : 'Desconhecido';
+  }
+  
+
+
   verDetalhes(): void {
-    if (this.reservaId === null || this.reservaId < 0) {
+    if (this.reservaId === null || this.reservaId <= 0) {
       alert('Por favor, insira um ID de reserva válido.');
       return;
     }
@@ -70,11 +122,11 @@ export class GerenciarReservaComponent {
         alert('Reserva não encontrada.');
       }
       this.isLoading = false;
-    }, 1000);
+    }, 500);
   }
 
   editarReserva(): void {
-    if (this.reservaId === null || this.reservaId < 0) {
+    if (this.reservaId === null || this.reservaId <= 0) {
       alert('Por favor, insira um ID de reserva válido.');
       return;
     }
@@ -83,17 +135,18 @@ export class GerenciarReservaComponent {
     setTimeout(() => {
       const reserva = this.reservas.find(reserva => reserva.id === this.reservaId);
       if (reserva) {
-        // Preenche o formulário de edição com os dados da reserva
+        const hospede = this.hospedes.find(h => h.id === reserva.hospedeId);
+
         this.editForm = {
-          nomeUsuario: reserva.hospede,
-          email: 'email_simulado@exemplo.com',  // Simulando o email
+          nomeUsuario: hospede ? hospede.nome : '',
+          email: hospede ? hospede.email : '',
           dataCheckIn: reserva.dataCheckIn,
           dataCheckOut: reserva.dataCheckOut,
           numHospedes: reserva.numHospedes,
           status: reserva.status,
           hotel: { id: reserva.hotelId },
           quarto: { id: reserva.quartoId },
-          hospede: { id: reserva.hospedeId }
+          hospede: { id: reserva.hospedeId },
         };
         this.showEditModal = true;
         this.reservaSelecionada = reserva;
@@ -101,11 +154,11 @@ export class GerenciarReservaComponent {
         alert('Reserva não encontrada para edição.');
       }
       this.isLoading = false;
-    }, 1000);
+    }, 500);
   }
 
   excluirReserva(): void {
-    if (this.reservaId === null || this.reservaId < 0) {
+    if (this.reservaId === null || this.reservaId <= 0) {
       alert('Por favor, insira um ID de reserva válido.');
       return;
     }
@@ -114,6 +167,7 @@ export class GerenciarReservaComponent {
       const index = this.reservas.findIndex(reserva => reserva.id === this.reservaId);
       if (index !== -1) {
         this.reservas.splice(index, 1);
+        localStorage.setItem('reservas', JSON.stringify(this.reservas));
         alert(`Reserva com ID ${this.reservaId} foi excluída.`);
         this.reservaSelecionada = null;
         this.reservaId = null;
@@ -136,11 +190,25 @@ export class GerenciarReservaComponent {
 
   salvarEdicao(): void {
     if (this.reservaSelecionada) {
-      this.reservaSelecionada.hospede = this.editForm.nomeUsuario;
+      // Atualiza os campos da reserva selecionada
       this.reservaSelecionada.dataCheckIn = this.editForm.dataCheckIn;
       this.reservaSelecionada.dataCheckOut = this.editForm.dataCheckOut;
       this.reservaSelecionada.numHospedes = this.editForm.numHospedes;
       this.reservaSelecionada.status = this.editForm.status;
+      this.reservaSelecionada.hospedeId = this.editForm.hospede.id;
+      this.reservaSelecionada.hotelId = this.editForm.hotel.id;
+      this.reservaSelecionada.quartoId = this.editForm.quarto.id;
+
+      // Atualizar informações do hóspede no array de hóspedes
+      const hospedeIndex = this.hospedes.findIndex(h => h.id === this.editForm.hospede.id);
+      if (hospedeIndex !== -1) {
+        this.hospedes[hospedeIndex].nome = this.editForm.nomeUsuario;
+        this.hospedes[hospedeIndex].email = this.editForm.email;
+        localStorage.setItem('clientes', JSON.stringify(this.hospedes));
+      }
+
+      // Atualiza o localStorage das reservas
+      localStorage.setItem('reservas', JSON.stringify(this.reservas));
       alert(`Reserva com ID ${this.reservaSelecionada.id} atualizada com sucesso.`);
       this.fecharModal();
     }

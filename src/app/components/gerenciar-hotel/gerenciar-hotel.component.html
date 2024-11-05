@@ -10,7 +10,7 @@
         <!-- Formulário para Gerenciar Hotel -->
         <div class="form-outline mb-4">
           <input type="number" [(ngModel)]="hotelId" id="hotelIdInput" class="form-control" placeholder=" " required />
-          <label class="form-label" for="hotelIdInput">ID do Hotel</label>
+          <label class="floating-label" for="hotelIdInput">ID do Hotel</label>
         </div>
   
         <!-- Botões de Ação -->
@@ -34,22 +34,22 @@
         <h5>Editar Hotel</h5>
         <div class="form-outline mb-4">
           <input type="text" [(ngModel)]="editForm.nome" id="nameInput" class="form-control" placeholder=" " required />
-          <label class="form-label" for="nameInput">Nome do Hotel</label>
+          <label class="floating-label" for="nameInput">Nome do Hotel</label>
         </div>
   
         <div class="form-outline mb-4">
           <input type="text" [(ngModel)]="editForm.endereco" id="addressInput" class="form-control" placeholder=" " required />
-          <label class="form-label" for="addressInput">Endereço</label>
+          <label class="floating-label" for="addressInput">Endereço</label>
         </div>
   
         <div class="form-outline mb-4">
           <textarea [(ngModel)]="editForm.descricao" id="descriptionInput" class="form-control" placeholder=" " required></textarea>
-          <label class="form-label" for="descriptionInput">Descrição</label>
+          <label class="floating-label" for="descriptionInput">Descrição</label>
         </div>
   
         <div class="form-outline mb-4">
           <input type="number" [(ngModel)]="editForm.numeroDeQuartos" id="roomCountInput" class="form-control" placeholder=" " required />
-          <label class="form-label" for="roomCountInput">Número de Quartos</label>
+          <label class="floating-label" for="roomCountInput">Número de Quartos</label>
         </div>
   
         <button type="button" class="btn btn-success btn-block" (click)="salvarEdicao()">Salvar Alterações</button>

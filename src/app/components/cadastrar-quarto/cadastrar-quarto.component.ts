@@ -25,11 +25,20 @@ export class CadastrarQuartoComponent implements OnInit {
   }
 
   carregarHoteis() {
-    // Dados de hotéis simulados para preencher a seleção de hotéis
-    this.hoteis = [
-      { id: 1, nome: 'Hotel A' },
-      { id: 2, nome: 'Hotel B' },
-    ];
+    const hoteisSalvos = JSON.parse(localStorage.getItem('hoteis') || '[]');
+    if (hoteisSalvos.length > 0) {
+      this.hoteis = hoteisSalvos;
+    } else {
+      alert('Nenhum hotel encontrado. Por favor, cadastre um hotel primeiro.');
+      this.router.navigate(['/cadastrar-hotel']);
+    }
+  }
+
+  gerarIdQuarto(): number {
+    const quartosExistentes = JSON.parse(localStorage.getItem('quartos') || '[]');
+    return quartosExistentes.length > 0
+      ? quartosExistentes[quartosExistentes.length - 1].id + 1
+      : 1;
   }
 
   cadastrarQuarto() {
@@ -39,19 +48,18 @@ export class CadastrarQuartoComponent implements OnInit {
     }
 
     const quarto = {
-      id: Date.now(), // Usa a data como ID único
+      id: this.gerarIdQuarto(),
       numero: this.numero,
       tipo: this.tipo,
       status: this.status,
-      hotel: { id: this.hotelSelecionado }
+      hotelId: this.hotelSelecionado
     };
 
-    // Armazena no localStorage
     const quartos = JSON.parse(localStorage.getItem('quartos') || '[]');
     quartos.push(quarto);
     localStorage.setItem('quartos', JSON.stringify(quartos));
 
     alert('Quarto cadastrado com sucesso!');
-    this.router.navigate(['/home']); // Volta para a página inicial após o cadastro
+    this.router.navigate(['/home']);
   }
 }

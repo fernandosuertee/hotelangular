@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 
 interface Cliente {
+  id: number;
   nome: string;
   email: string;
 }
@@ -22,6 +23,13 @@ export class RegistrarComponent {
   isLoading: boolean = false;
 
   constructor(private router: Router) {}
+
+  gerarIdCliente(): number {
+    const clientesExistentes = JSON.parse(localStorage.getItem('clientes') || '[]');
+    return clientesExistentes.length > 0
+      ? clientesExistentes[clientesExistentes.length - 1].id + 1
+      : 1;
+  }
 
   registrar() {
     if (!this.nome || !this.email || !this.confirmEmail) {
@@ -45,7 +53,12 @@ export class RegistrarComponent {
     setTimeout(() => {
       this.isLoading = false;
 
-      const novoCliente: Cliente = { nome: this.nome, email: this.email };
+      const novoCliente: Cliente = {
+        id: this.gerarIdCliente(),
+        nome: this.nome,
+        email: this.email
+      };
+
       const clientesExistentes = JSON.parse(localStorage.getItem('clientes') || '[]');
       clientesExistentes.push(novoCliente);
       localStorage.setItem('clientes', JSON.stringify(clientesExistentes));

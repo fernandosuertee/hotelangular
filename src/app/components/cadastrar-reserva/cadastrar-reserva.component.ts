@@ -2,14 +2,13 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-cadastrar-reserva',
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './cadastrar-reserva.component.html',
-  styleUrls: ['./cadastrar-reserva.component.scss']
+  styleUrls: ['./cadastrar-reserva.component.scss'],
 })
 export class CadastrarReservaComponent implements OnInit {
   hospedes: any[] = [];
@@ -23,7 +22,7 @@ export class CadastrarReservaComponent implements OnInit {
   numHospedes!: number;
   isLoading: boolean = false;
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.carregarHospedes();
@@ -31,78 +30,66 @@ export class CadastrarReservaComponent implements OnInit {
   }
 
   carregarHospedes() {
-    this.isLoading = true;
-    this.http.get<any[]>('/api/hospedes').subscribe(
-      (data) => {
-        this.hospedes = data;
-        this.isLoading = false;
-      },
-      (error) => {
-        console.error('Erro ao buscar hóspedes:', error);
-        alert('Erro ao carregar a lista de hóspedes. Tente novamente.');
-        this.isLoading = false;
-      }
-    );
+    const hospedesSalvos = JSON.parse(localStorage.getItem('clientes') || '[]');
+    this.hospedes = hospedesSalvos.map((cliente: any, index: number) => ({
+      id: index + 1,
+      nome: cliente.nome,
+      email: cliente.email,
+    }));
   }
 
   carregarHoteis() {
-    this.isLoading = true;
-    this.http.get<any[]>('/api/hoteis').subscribe(
-      (data) => {
-        this.hoteis = data;
-        this.isLoading = false;
-      },
-      (error) => {
-        console.error('Erro ao buscar hotéis:', error);
-        alert('Erro ao carregar a lista de hotéis. Tente novamente.');
-        this.isLoading = false;
-      }
-    );
+    const hoteisSalvos = JSON.parse(localStorage.getItem('hoteis') || '[]');
+    this.hoteis = hoteisSalvos.length > 0 ? hoteisSalvos : [{ id: 1, nome: 'Hotel Central' }];
   }
 
   carregarQuartos() {
-    this.isLoading = true;
-    this.http.get<any[]>(`/api/quartos?hotelId=${this.hotelSelecionado}`).subscribe(
-      (data) => {
-        this.quartos = data;
-        this.isLoading = false;
-      },
-      (error) => {
-        console.error('Erro ao buscar quartos:', error);
-        alert('Erro ao carregar a lista de quartos. Tente novamente.');
-        this.isLoading = false;
-      }
-    );
+    const quartosSalvos = JSON.parse(localStorage.getItem('quartos') || '[]');
+    this.quartos = quartosSalvos.filter((quarto: any) => quarto.hotelId === this.hotelSelecionado);
+  }
+
+  gerarIdReserva(): number {
+    const reservasExistentes = JSON.parse(localStorage.getItem('reservas') || '[]');
+    return reservasExistentes.length > 0
+      ? reservasExistentes[reservasExistentes.length - 1].id + 1
+      : 1;
   }
 
   cadastrarReserva() {
-    if (!this.hospedeSelecionado || !this.hotelSelecionado || !this.quartoSelecionado || !this.dataCheckIn || !this.dataCheckOut || !this.numHospedes) {
+    if (
+      !this.hospedeSelecionado ||
+      !this.hotelSelecionado ||
+      !this.quartoSelecionado ||
+      !this.dataCheckIn ||
+      !this.dataCheckOut ||
+      !this.numHospedes
+    ) {
       alert('Por favor, preencha todos os campos.');
       return;
     }
 
+    // Verifica se a data de check-out é posterior à data de check-in
+    if (new Date(this.dataCheckOut) <= new Date(this.dataCheckIn)) {
+      alert('A data de check-out deve ser posterior à data de check-in.');
+      return;
+    }
+
     const reserva = {
-      hospede: { id: this.hospedeSelecionado },
-      hotel: { id: this.hotelSelecionado },
-      quarto: { id: this.quartoSelecionado },
+      id: this.gerarIdReserva(),
+      hospedeId: this.hospedeSelecionado,
+      hotelId: this.hotelSelecionado,
+      quartoId: this.quartoSelecionado,
       dataCheckIn: this.dataCheckIn,
       dataCheckOut: this.dataCheckOut,
       numHospedes: this.numHospedes,
-      status: "Pendente"
+      status: 'Pendente',
     };
 
-    this.isLoading = true;
-    this.http.post('/api/reservas', reserva).subscribe(
-      () => {
-        this.isLoading = false;
-        alert('Reserva cadastrada com sucesso!');
-        this.router.navigate(['/home']);
-      },
-      (error) => {
-        this.isLoading = false;
-        console.error('Erro ao cadastrar reserva:', error);
-        alert('Erro ao cadastrar a reserva. Tente novamente.');
-      }
-    );
+    const reservasExistentes = JSON.parse(localStorage.getItem('reservas') || '[]');
+    reservasExistentes.push(reserva);
+    localStorage.setItem('reservas', JSON.stringify(reservasExistentes));
+
+    alert('Reserva cadastrada com sucesso!');
+    this.router.navigate(['/home']);
   }
 }

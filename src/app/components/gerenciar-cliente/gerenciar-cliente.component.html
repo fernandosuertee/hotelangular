@@ -10,7 +10,7 @@
       <!-- Formulário para Gerenciar Cliente -->
       <div class="form-outline mb-4">
         <input type="number" [(ngModel)]="clienteId" id="clienteIdInput" class="form-control" placeholder=" " required />
-        <label class="form-label" for="clienteIdInput">ID do Cliente</label>
+        <label class="floating-label" for="clienteIdInput">ID do Cliente</label>
       </div>
 
       <!-- Botões de Ação -->
@@ -33,11 +33,11 @@
     <div class="modal-content">
       <h5>Editar Cliente</h5>
       <div class="form-outline mb-3">
-        <label class="form-label" for="nome">Nome</label>
+        <label class="floating-label" for="nome">Nome</label>
         <input type="text" [(ngModel)]="editForm.nome" id="nome" class="form-control" />
       </div>
       <div class="form-outline mb-3">
-        <label class="form-label" for="email">E-mail</label>
+        <label class="floating-label" for="email">E-mail</label>
         <input type="email" [(ngModel)]="editForm.email" id="email" class="form-control" />
       </div>
       <button type="button" class="btn btn-success btn-block" (click)="salvarEdicao()">Salvar Alterações</button>

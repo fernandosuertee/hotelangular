@@ -10,7 +10,7 @@
       <!-- Formulário para Gerenciar Reserva -->
       <div class="form-outline mb-4">
         <input type="number" [(ngModel)]="reservaId" id="reservaIdInput" class="form-control" placeholder=" " required />
-        <label class="form-label" for="reservaIdInput">ID da Reserva</label>
+        <label class="floating-label" for="reservaIdInput">ID da Reserva</label>
       </div>
 
       <!-- Botões de Ação -->
@@ -32,30 +32,68 @@
   <div *ngIf="showEditModal" class="modal-overlay">
     <div class="modal-content">
       <h5>Editar Reserva</h5>
+
+      <!-- Selecionar Hóspede -->
       <div class="form-outline mb-3">
-        <label class="form-label" for="nomeUsuario">Nome do Usuário</label>
+        <label class="floating-label" for="hospedeSelect">Selecionar Hóspede</label>
+        <select [(ngModel)]="editForm.hospede.id" id="hospedeSelect" class="form-control" required>
+          <option *ngFor="let hospede of hospedes" [value]="hospede.id">{{ hospede.nome }}</option>
+        </select>
+      </div>
+
+      <!-- Nome do Usuário -->
+      <div class="form-outline mb-3">
+        <label class="floating-label" for="nomeUsuario">Nome do Usuário</label>
         <input type="text" [(ngModel)]="editForm.nomeUsuario" id="nomeUsuario" class="form-control" />
       </div>
+
+      <!-- E-mail -->
       <div class="form-outline mb-3">
-        <label class="form-label" for="email">E-mail</label>
+        <label class="floating-label" for="email">E-mail</label>
         <input type="email" [(ngModel)]="editForm.email" id="email" class="form-control" />
       </div>
+
+      <!-- Selecionar Hotel -->
       <div class="form-outline mb-3">
-        <label class="form-label" for="dataCheckIn">Data Check-in</label>
+        <label class="floating-label" for="hotelSelect">Selecionar Hotel</label>
+        <select [(ngModel)]="editForm.hotel.id" id="hotelSelect" class="form-control" required>
+          <option *ngFor="let hotel of hoteis" [value]="hotel.id">{{ hotel.nome }}</option>
+        </select>
+      </div>
+
+      <!-- Selecionar Quarto -->
+      <div class="form-outline mb-3">
+        <label class="floating-label" for="quartoSelect">Selecionar Quarto</label>
+        <select [(ngModel)]="editForm.quarto.id" id="quartoSelect" class="form-control" required>
+          <option *ngFor="let quarto of quartos" [value]="quarto.id">{{ quarto.numero }}</option>
+        </select>
+      </div>
+
+      <!-- Data Check-in -->
+      <div class="form-outline mb-3">
+        <label class="floating-label" for="dataCheckIn">Data Check-in</label>
         <input type="date" [(ngModel)]="editForm.dataCheckIn" id="dataCheckIn" class="form-control" />
       </div>
+
+      <!-- Data Check-out -->
       <div class="form-outline mb-3">
-        <label class="form-label" for="dataCheckOut">Data Check-out</label>
+        <label class="floating-label" for="dataCheckOut">Data Check-out</label>
         <input type="date" [(ngModel)]="editForm.dataCheckOut" id="dataCheckOut" class="form-control" />
       </div>
+
+      <!-- Número de Hóspedes -->
       <div class="form-outline mb-3">
-        <label class="form-label" for="numHospedes">Número de Hóspedes</label>
+        <label class="floating-label" for="numHospedes">Número de Hóspedes</label>
         <input type="number" [(ngModel)]="editForm.numHospedes" id="numHospedes" class="form-control" />
       </div>
+
+      <!-- Status -->
       <div class="form-outline mb-3">
-        <label class="form-label" for="status">Status</label>
+        <label class="floating-label" for="status">Status</label>
         <input type="text" [(ngModel)]="editForm.status" id="status" class="form-control" />
       </div>
+
+      <!-- Botões -->
       <button type="button" class="btn btn-success btn-block" (click)="salvarEdicao()">Salvar Alterações</button>
       <button type="button" class="btn btn-secondary btn-block" (click)="fecharModal()">Fechar</button>
     </div>
@@ -65,8 +103,10 @@
   <div *ngIf="showDetailsModal" class="modal-overlay">
     <div class="modal-content">
       <h5>Detalhes da Reserva</h5>
-      <p><strong>Nome do Usuário:</strong> {{ reservaSelecionada?.hospede }}</p>
-      <p><strong>E-mail:</strong> email_simulado&#64;exemplo.com</p>
+      <p><strong>Nome do Usuário:</strong> {{ obterNomeHospede(reservaSelecionada?.hospedeId) }}</p>
+      <p><strong>E-mail:</strong> {{ obterEmailHospede(reservaSelecionada?.hospedeId) }}</p>
+      <p><strong>Hotel:</strong> {{ obterNomeHotel(reservaSelecionada?.hotelId) }}</p>
+      <p><strong>Quarto:</strong> {{ obterNumeroQuarto(reservaSelecionada?.quartoId) }}</p>
       <p><strong>Data Check-in:</strong> {{ reservaSelecionada?.dataCheckIn }}</p>
       <p><strong>Data Check-out:</strong> {{ reservaSelecionada?.dataCheckOut }}</p>
       <p><strong>Número de Hóspedes:</strong> {{ reservaSelecionada?.numHospedes }}</p>
@@ -80,7 +120,16 @@
     <div class="modal-content">
       <h5>Lista de Todas as Reservas</h5>
       <div *ngFor="let reserva of reservas">
-        <p><strong>ID:</strong> {{ reserva.id }} - <strong>Nome do Usuário:</strong> {{ reserva.hospede }} - <strong>Status:</strong> {{ reserva.status }}</p>
+        <p>
+          <strong>ID:</strong> {{ reserva.id }} -
+          <strong>Nome do Usuário:</strong> {{ obterNomeHospede(reserva.hospedeId) }} -
+          <strong>Hotel:</strong> {{ obterNomeHotel(reserva.hotelId) }} -
+          <strong>Quarto:</strong> {{ obterNumeroQuarto(reserva.quartoId) }} -
+          <strong>Data Check-in:</strong> {{ reserva.dataCheckIn }} -
+          <strong>Data Check-out:</strong> {{ reserva.dataCheckOut }} -
+          <strong>Número de Hóspedes:</strong> {{ reserva.numHospedes }} -
+          <strong>Status:</strong> {{ reserva.status }}
+        </p>
       </div>
       <button type="button" class="btn btn-secondary btn-block" (click)="fecharModal()">Fechar</button>
     </div>

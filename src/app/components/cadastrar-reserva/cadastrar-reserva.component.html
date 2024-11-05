@@ -1,66 +1,63 @@
-
-
 <div class="main-container">
-    <div class="container d-flex justify-content-center mt-5">
-      <div class="col-md-6 col-lg-4">
-        <div class="bg-image hover-overlay ripple">
-          <a href="#" target="_blank">
-            <img src="assets/reservafacil.png" alt="Reserva Fácil" class="img-fluid" />
-          </a>
-        </div>
-  
-        <!-- Formulário de Cadastro de Reserva -->
-        <div class="form-outline mb-4">
-          <label for="hospedeSelect" class="form-label">Selecionar Hóspede</label>
-          <select [(ngModel)]="hospedeSelecionado" id="hospedeSelect" class="form-control" required>
-            <option *ngFor="let hospede of hospedes" [value]="hospede.id">{{ hospede.nome }}</option>
-          </select>
-        </div>
-  
-        <div class="form-outline mb-4">
-          <label for="hotelSelect" class="form-label">Selecionar Hotel</label>
-          <select [(ngModel)]="hotelSelecionado" id="hotelSelect" class="form-control" required (change)="carregarQuartos()">
-            <option *ngFor="let hotel of hoteis" [value]="hotel.id">{{ hotel.nome }}</option>
-          </select>
-        </div>
-  
-        <div class="form-outline mb-4">
-          <label for="quartoSelect" class="form-label">Selecionar Quarto</label>
-          <select [(ngModel)]="quartoSelecionado" id="quartoSelect" class="form-control" required>
-            <option *ngFor="let quarto of quartos" [value]="quarto.id">{{ quarto.numero }} - {{ quarto.tipo }}</option>
-          </select>
-        </div>
-  
-        <div class="form-outline mb-4">
-          <input type="date" [(ngModel)]="dataCheckIn" id="checkInInput" class="form-control" required />
-          <label class="form-label" for="checkInInput">Data de Check-In</label>
-        </div>
-  
-        <div class="form-outline mb-4">
-          <input type="date" [(ngModel)]="dataCheckOut" id="checkOutInput" class="form-control" required />
-          <label class="form-label" for="checkOutInput">Data de Check-Out</label>
-        </div>
-  
-        <div class="form-outline mb-4">
-          <input type="number" [(ngModel)]="numHospedes" id="numHospedesInput" class="form-control" placeholder=" " required />
-          <label class="form-label" for="numHospedesInput">Número de Hóspedes</label>
-        </div>
-  
-        <!-- Ícone de carregamento -->
-        <div *ngIf="isLoading" class="d-flex justify-content-center mb-4">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Carregando...</span>
-          </div>
-        </div>
-  
-        <button type="button" class="btn btn-primary btn-block mb-4" (click)="cadastrarReserva()" [disabled]="isLoading">
-          Cadastrar Reserva
-        </button>
+  <div class="container d-flex justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+      <div class="bg-image hover-overlay ripple">
+        <a href="#" target="_blank">
+          <img src="assets/reservafacil.png" alt="Reserva Fácil" class="img-fluid" />
+        </a>
       </div>
+
+      <!-- Formulário de Cadastro de Reserva -->
+      <div class="form-outline mb-4">
+        <label for="hospedeSelect" class="floating-label">Selecionar Hóspede</label>
+        <select [(ngModel)]="hospedeSelecionado" id="hospedeSelect" class="form-control" required>
+          <option *ngFor="let hospede of hospedes" [value]="hospede.id">{{ hospede.nome }}</option>
+        </select>
+      </div>
+
+      <div class="form-outline mb-4">
+        <label for="hotelSelect" class="floating-label">Selecionar Hotel</label>
+        <select [(ngModel)]="hotelSelecionado" id="hotelSelect" class="form-control" required (change)="carregarQuartos()">
+          <option *ngFor="let hotel of hoteis" [value]="hotel.id">{{ hotel.nome }}</option>
+        </select>
+      </div>
+
+      <div class="form-outline mb-4">
+        <label for="quartoSelect" class="floating-label">Selecionar Quarto</label>
+        <select [(ngModel)]="quartoSelecionado" id="quartoSelect" class="form-control" required>
+          <option *ngFor="let quarto of quartos" [value]="quarto.id">{{ quarto.numero }} - {{ quarto.tipo }}</option>
+        </select>
+      </div>
+
+      <div class="form-outline mb-4">
+        <input type="date" [(ngModel)]="dataCheckIn" id="checkInInput" class="form-control" required />
+        <label class="floating-label" for="checkInInput">Data de Check-In</label>
+      </div>
+
+      <div class="form-outline mb-4">
+        <input type="date" [(ngModel)]="dataCheckOut" id="checkOutInput" class="form-control" required />
+        <label class="floating-label" for="checkOutInput">Data de Check-Out</label>
+      </div>
+
+      <div class="form-outline mb-4">
+        <input type="number" [(ngModel)]="numHospedes" id="numHospedesInput" class="form-control" placeholder=" " required />
+        <label class="floating-label" for="numHospedesInput">Número de Hóspedes</label>
+      </div>
+
+      <!-- Ícone de carregamento -->
+      <div *ngIf="isLoading" class="d-flex justify-content-center mb-4">
+        <div class="spinner-border text-primary" role="status">
+          <span class="visually-hidden">Carregando...</span>
+        </div>
+      </div>
+
+      <button type="button" class="btn btn-primary btn-block mb-4" (click)="cadastrarReserva()" [disabled]="isLoading">
+        Cadastrar Reserva
+      </button>
     </div>
-  
-    <footer class="footer">
-      © 2024 Reserva Fácil. Todos os direitos reservados.
-    </footer>
   </div>
-  
+
+  <footer class="footer">
+    © 2024 Reserva Fácil. Todos os direitos reservados.
+  </footer>
+</div>

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -18,17 +18,11 @@ interface Quarto {
   templateUrl: './gerenciar-quarto.component.html',
   styleUrls: ['./gerenciar-quarto.component.scss']
 })
-export class GerenciarQuartoComponent {
+export class GerenciarQuartoComponent implements OnInit {
   quartoId: number | null = null;
   isLoading: boolean = false;
   quartos: Quarto[] = [];
   quartoSelecionado: Quarto | null = null;
-
-  hoteis = [
-    { id: 1, nome: 'Hotel A' },
-    { id: 2, nome: 'Hotel B' },
-    // Adicione outros hotéis, se necessário
-  ];
 
   showEditModal = false;
   showDetailsModal = false;
@@ -41,19 +35,31 @@ export class GerenciarQuartoComponent {
     hotelSelecionado: 0
   };
 
-  constructor(private router: Router) {
+  hoteis: any[] = []; // Carregar hotéis do localStorage
+
+  constructor(private router: Router) {}
+
+  ngOnInit(): void {
+    this.carregarHoteis();
     this.carregarQuartos();
+  }
+
+  carregarHoteis(): void {
+    this.hoteis = JSON.parse(localStorage.getItem('hoteis') || '[]');
   }
 
   carregarQuartos(): void {
     const quartosArmazenados = JSON.parse(localStorage.getItem('quartos') || '[]');
-    this.quartos = quartosArmazenados.map((quarto: any, index: number) => ({
-      id: quarto.id || index + 1,
-      numero: quarto.numero,
-      tipo: quarto.tipo,
-      status: quarto.status,
-      hotel: { id: quarto.hotel.id, nome: this.hoteis.find(h => h.id === quarto.hotel.id)?.nome || 'Hotel Desconhecido' }
-    }));
+    this.quartos = quartosArmazenados.map((quarto: any) => {
+      const hotel = this.hoteis.find((h: any) => h.id === quarto.hotelId);
+      return {
+        id: quarto.id,
+        numero: quarto.numero,
+        tipo: quarto.tipo,
+        status: quarto.status,
+        hotel: hotel || { id: quarto.hotelId, nome: 'Hotel Desconhecido' }
+      };
+    });
   }
 
   verDetalhes(): void {
@@ -109,7 +115,13 @@ export class GerenciarQuartoComponent {
       const index = this.quartos.findIndex(quarto => quarto.id === this.quartoId);
       if (index !== -1) {
         this.quartos.splice(index, 1);
-        localStorage.setItem('quartos', JSON.stringify(this.quartos));
+        localStorage.setItem('quartos', JSON.stringify(this.quartos.map(q => ({
+          id: q.id,
+          numero: q.numero,
+          tipo: q.tipo,
+          status: q.status,
+          hotelId: q.hotel.id
+        }))));
         alert(`Quarto com ID ${this.quartoId} foi excluído.`);
         this.quartoSelecionado = null;
         this.quartoId = null;
@@ -135,8 +147,17 @@ export class GerenciarQuartoComponent {
       this.quartoSelecionado.numero = this.editForm.numero;
       this.quartoSelecionado.tipo = this.editForm.tipo;
       this.quartoSelecionado.status = this.editForm.status;
-      this.quartoSelecionado.hotel.id = this.editForm.hotelSelecionado;
-      localStorage.setItem('quartos', JSON.stringify(this.quartos));
+      this.quartoSelecionado.hotel = this.hoteis.find(h => h.id === this.editForm.hotelSelecionado) || { id: this.editForm.hotelSelecionado, nome: 'Hotel Desconhecido' };
+
+      // Atualizar o localStorage
+      localStorage.setItem('quartos', JSON.stringify(this.quartos.map(q => ({
+        id: q.id,
+        numero: q.numero,
+        tipo: q.tipo,
+        status: q.status,
+        hotelId: q.hotel.id
+      }))));
+
       alert(`Quarto com ID ${this.quartoSelecionado.id} atualizado com sucesso.`);
       this.fecharModal();
     }
