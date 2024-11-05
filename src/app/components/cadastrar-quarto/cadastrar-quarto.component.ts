@@ -1,9 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router , RouterModule } from '@angular/router';
-import { HttpClient } from '@angular/common/http';
-
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-cadastrar-quarto',
@@ -20,25 +18,18 @@ export class CadastrarQuartoComponent implements OnInit {
   hoteis: any[] = [];
   isLoading: boolean = false;
 
-  constructor(private router: Router, private http: HttpClient) {}
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.carregarHoteis();
   }
 
   carregarHoteis() {
-    this.isLoading = true; // Mostra o carregamento ao buscar os hotéis
-    this.http.get<any[]>('/api/hoteis').subscribe(
-      (data) => {
-        this.hoteis = data;
-        this.isLoading = false; // Esconde o carregamento ao carregar os hotéis
-      },
-      (error) => {
-        console.error('Erro ao buscar hotéis:', error);
-        alert('Erro ao carregar a lista de hotéis. Tente novamente.');
-        this.isLoading = false;
-      }
-    );
+    // Dados de hotéis simulados para preencher a seleção de hotéis
+    this.hoteis = [
+      { id: 1, nome: 'Hotel A' },
+      { id: 2, nome: 'Hotel B' },
+    ];
   }
 
   cadastrarQuarto() {
@@ -48,24 +39,19 @@ export class CadastrarQuartoComponent implements OnInit {
     }
 
     const quarto = {
+      id: Date.now(), // Usa a data como ID único
       numero: this.numero,
       tipo: this.tipo,
       status: this.status,
-      hotel: { id: this.hotelSelecionado } // Vincula ao hotel selecionado
+      hotel: { id: this.hotelSelecionado }
     };
 
-    this.isLoading = true;
-    this.http.post('/api/quartos', quarto).subscribe(
-      () => {
-        this.isLoading = false;
-        alert('Quarto cadastrado com sucesso!');
-        this.router.navigate(['/home']);
-      },
-      (error) => {
-        this.isLoading = false;
-        console.error('Erro ao cadastrar quarto:', error);
-        alert('Erro ao cadastrar o quarto. Tente novamente.');
-      }
-    );
+    // Armazena no localStorage
+    const quartos = JSON.parse(localStorage.getItem('quartos') || '[]');
+    quartos.push(quarto);
+    localStorage.setItem('quartos', JSON.stringify(quartos));
+
+    alert('Quarto cadastrado com sucesso!');
+    this.router.navigate(['/home']); // Volta para a página inicial após o cadastro
   }
 }

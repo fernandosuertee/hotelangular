@@ -2,12 +2,16 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
+
+interface Cliente {
+  nome: string;
+  email: string;
+}
 
 @Component({
   selector: 'app-registrar',
   standalone: true,
-  imports: [CommonModule, FormsModule, RouterModule],
+  imports: [FormsModule, CommonModule],
   templateUrl: './registrar.component.html',
   styleUrls: ['./registrar.component.scss']
 })
@@ -18,10 +22,6 @@ export class RegistrarComponent {
   isLoading: boolean = false;
 
   constructor(private router: Router) {}
-
-  navigateTo(path: string) {
-    this.router.navigate([`/${path}`]);
-  }
 
   registrar() {
     if (!this.nome || !this.email || !this.confirmEmail) {
@@ -40,14 +40,18 @@ export class RegistrarComponent {
       return;
     }
 
-    // Inicia o carregamento
     this.isLoading = true;
 
-    // Simula o tempo de cadastro com carregamento
     setTimeout(() => {
-      this.isLoading = false; // Finaliza o carregamento
+      this.isLoading = false;
+
+      const novoCliente: Cliente = { nome: this.nome, email: this.email };
+      const clientesExistentes = JSON.parse(localStorage.getItem('clientes') || '[]');
+      clientesExistentes.push(novoCliente);
+      localStorage.setItem('clientes', JSON.stringify(clientesExistentes));
+
       alert('Cadastro realizado com sucesso!');
       this.router.navigate(['/home']);
-    }, 2000); // Tempo de 2 segundos para simular carregamento
+    }, 2000);
   }
 }

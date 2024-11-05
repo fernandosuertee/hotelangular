@@ -20,13 +20,6 @@
         <input type="email" [(ngModel)]="confirmEmail" id="confirmEmailInput" class="form-control" placeholder=" " required />
         <label class="form-label" for="confirmEmailInput">Confirmar E-mail</label>
       </div>
-      
-      <!-- Spinner de carregamento -->
-      <div *ngIf="isLoading" class="d-flex justify-content-center mb-4">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Carregando...</span>
-        </div>
-      </div>
 
       <button type="button" class="btn btn-primary btn-block mb-4" (click)="registrar()" [disabled]="isLoading">Cadastrar</button>
 
