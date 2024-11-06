@@ -7,19 +7,19 @@
         </a>
       </div>
 
-      <!-- Formulário para Gerenciar Cliente -->
+      
       <div class="form-outline mb-4">
         <input type="number" [(ngModel)]="clienteId" id="clienteIdInput" class="form-control" placeholder=" " required />
         <label class="floating-label" for="clienteIdInput">ID do Cliente</label>
       </div>
 
-      <!-- Botões de Ação -->
+
       <button type="button" class="btn btn-info btn-block mb-2" (click)="verDetalhes()">Ver Detalhes</button>
       <button type="button" class="btn btn-primary btn-block mb-2" (click)="editarCliente()">Alterar Cliente</button>
       <button type="button" class="btn btn-danger btn-block mb-2" (click)="excluirCliente()">Excluir</button>
       <button type="button" class="btn btn-secondary btn-block mb-4" (click)="listarClientes()">Listar Todos</button>
 
-      <!-- Mensagem de Carregamento -->
+
       <div *ngIf="isLoading" class="d-flex justify-content-center mb-4">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Carregando...</span>
@@ -28,7 +28,7 @@
     </div>
   </div>
 
-  <!-- Modal de Edição -->
+
   <div *ngIf="showEditModal" class="modal-overlay">
     <div class="modal-content">
       <h5>Editar Cliente</h5>
@@ -45,7 +45,7 @@
     </div>
   </div>
 
-  <!-- Modal de Ver Detalhes -->
+
   <div *ngIf="showDetailsModal" class="modal-overlay">
     <div class="modal-content">
       <h5>Detalhes do Cliente</h5>
@@ -55,7 +55,6 @@
     </div>
   </div>
 
-  <!-- Modal de Listar Todos -->
   <div *ngIf="showListAllModal" class="modal-overlay">
     <div class="modal-content">
       <h5>Lista de Todos os Clientes</h5>

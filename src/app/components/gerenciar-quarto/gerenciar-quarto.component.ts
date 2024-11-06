@@ -35,7 +35,7 @@ export class GerenciarQuartoComponent implements OnInit {
     hotelSelecionado: 0
   };
 
-  hoteis: any[] = []; // Carregar hotéis do localStorage
+  hoteis: any[] = []; 
 
   constructor(private router: Router) {}
 
@@ -149,7 +149,7 @@ export class GerenciarQuartoComponent implements OnInit {
       this.quartoSelecionado.status = this.editForm.status;
       this.quartoSelecionado.hotel = this.hoteis.find(h => h.id === this.editForm.hotelSelecionado) || { id: this.editForm.hotelSelecionado, nome: 'Hotel Desconhecido' };
 
-      // Atualizar o localStorage
+
       localStorage.setItem('quartos', JSON.stringify(this.quartos.map(q => ({
         id: q.id,
         numero: q.numero,

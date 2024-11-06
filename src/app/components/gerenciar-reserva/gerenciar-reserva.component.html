@@ -28,12 +28,12 @@
     </div>
   </div>
 
-  <!-- Modal de Edição -->
+
   <div *ngIf="showEditModal" class="modal-overlay">
     <div class="modal-content">
       <h5>Editar Reserva</h5>
 
-      <!-- Selecionar Hóspede -->
+
       <div class="form-outline mb-3">
         <label class="floating-label" for="hospedeSelect">Selecionar Hóspede</label>
         <select [(ngModel)]="editForm.hospede.id" id="hospedeSelect" class="form-control" required>
@@ -41,19 +41,19 @@
         </select>
       </div>
 
-      <!-- Nome do Usuário -->
+
       <div class="form-outline mb-3">
         <label class="floating-label" for="nomeUsuario">Nome do Usuário</label>
         <input type="text" [(ngModel)]="editForm.nomeUsuario" id="nomeUsuario" class="form-control" />
       </div>
 
-      <!-- E-mail -->
+
       <div class="form-outline mb-3">
         <label class="floating-label" for="email">E-mail</label>
         <input type="email" [(ngModel)]="editForm.email" id="email" class="form-control" />
       </div>
 
-      <!-- Selecionar Hotel -->
+
       <div class="form-outline mb-3">
         <label class="floating-label" for="hotelSelect">Selecionar Hotel</label>
         <select [(ngModel)]="editForm.hotel.id" id="hotelSelect" class="form-control" required>
@@ -61,7 +61,7 @@
         </select>
       </div>
 
-      <!-- Selecionar Quarto -->
+
       <div class="form-outline mb-3">
         <label class="floating-label" for="quartoSelect">Selecionar Quarto</label>
         <select [(ngModel)]="editForm.quarto.id" id="quartoSelect" class="form-control" required>
@@ -69,37 +69,37 @@
         </select>
       </div>
 
-      <!-- Data Check-in -->
+
       <div class="form-outline mb-3">
         <label class="floating-label" for="dataCheckIn">Data Check-in</label>
         <input type="date" [(ngModel)]="editForm.dataCheckIn" id="dataCheckIn" class="form-control" />
       </div>
 
-      <!-- Data Check-out -->
+
       <div class="form-outline mb-3">
         <label class="floating-label" for="dataCheckOut">Data Check-out</label>
         <input type="date" [(ngModel)]="editForm.dataCheckOut" id="dataCheckOut" class="form-control" />
       </div>
 
-      <!-- Número de Hóspedes -->
+ 
       <div class="form-outline mb-3">
         <label class="floating-label" for="numHospedes">Número de Hóspedes</label>
         <input type="number" [(ngModel)]="editForm.numHospedes" id="numHospedes" class="form-control" />
       </div>
 
-      <!-- Status -->
+
       <div class="form-outline mb-3">
         <label class="floating-label" for="status">Status</label>
         <input type="text" [(ngModel)]="editForm.status" id="status" class="form-control" />
       </div>
 
-      <!-- Botões -->
+
       <button type="button" class="btn btn-success btn-block" (click)="salvarEdicao()">Salvar Alterações</button>
       <button type="button" class="btn btn-secondary btn-block" (click)="fecharModal()">Fechar</button>
     </div>
   </div>
 
-  <!-- Modal de Ver Detalhes -->
+
   <div *ngIf="showDetailsModal" class="modal-overlay">
     <div class="modal-content">
       <h5>Detalhes da Reserva</h5>
@@ -115,7 +115,7 @@
     </div>
   </div>
 
-  <!-- Modal de Listar Todas -->
+
   <div *ngIf="showListAllModal" class="modal-overlay">
     <div class="modal-content">
       <h5>Lista de Todas as Reservas</h5>

@@ -58,7 +58,7 @@ export class CadastrarHotelComponent {
       localStorage.setItem('hoteis', JSON.stringify(hoteisExistentes));
 
       alert('Hotel cadastrado com sucesso!');
-      this.router.navigate(['/home']);  // Navega para a página inicial após o cadastro
+      this.router.navigate(['/home']);  
     }, 2000);
   }
 }

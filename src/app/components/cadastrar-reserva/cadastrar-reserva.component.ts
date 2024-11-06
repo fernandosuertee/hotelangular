@@ -68,7 +68,7 @@ export class CadastrarReservaComponent implements OnInit {
       return;
     }
 
-    // Verifica se a data de check-out é posterior à data de check-in
+    
     if (new Date(this.dataCheckOut) <= new Date(this.dataCheckIn)) {
       alert('A data de check-out deve ser posterior à data de check-in.');
       return;

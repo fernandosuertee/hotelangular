@@ -7,7 +7,7 @@
         </a>
       </div>
 
-      <!-- Formulário de Cadastro de Reserva -->
+
       <div class="form-outline mb-4">
         <label for="hospedeSelect" class="floating-label">Selecionar Hóspede</label>
         <select [(ngModel)]="hospedeSelecionado" id="hospedeSelect" class="form-control" required>
@@ -44,7 +44,7 @@
         <label class="floating-label" for="numHospedesInput">Número de Hóspedes</label>
       </div>
 
-      <!-- Ícone de carregamento -->
+
       <div *ngIf="isLoading" class="d-flex justify-content-center mb-4">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Carregando...</span>

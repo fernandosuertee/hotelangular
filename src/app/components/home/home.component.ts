@@ -22,7 +22,7 @@ export class HomeComponent {
   }
 
   logout() {
-    this.authService.logout(); // Lógica de logout no AuthService
-    this.router.navigate(['/login']); // Redireciona para a página de login
+    this.authService.logout(); 
+    this.router.navigate(['/login']); 
   }
 }

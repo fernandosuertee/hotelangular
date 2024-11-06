@@ -12,7 +12,7 @@ export interface Reserva {
     id: number;
     numero?: string;
   };
-  dataCheckIn: string; // Usaremos string para facilitar o binding com inputs de data
+  dataCheckIn: string; 
   dataCheckOut: string;
   numHospedes: number;
   status: string;

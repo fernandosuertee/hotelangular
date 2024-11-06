@@ -1,10 +1,10 @@
 .main-container {
-    min-height: 100vh; // Use min-height para garantir que a tela seja preenchida mesmo com scroll
+    min-height: 100vh; 
     display: flex;
     flex-direction: column;
     font-family: 'Roboto', sans-serif;
     background-color: #e3e4df;
-    padding-bottom: 60px; // Adiciona espaço extra para o footer
+    padding-bottom: 60px; 
   }
   
   .container {
@@ -15,7 +15,7 @@
     align-items: center;
     max-width: 100%;
     padding: 15px;
-    margin-top: 60px; // Compensa a altura da navbar fixa
+    margin-top: 60px; 
   }
   
   .bg-image img {
@@ -51,7 +51,7 @@
     top: 0;
     width: 100%;
     z-index: 1000;
-    background-color: #f8f9fa; // Ajuste a cor de fundo da navbar
+    background-color: #f8f9fa; 
     padding: 10px 15px;
     border-bottom: 1px solid #ccc;
   }

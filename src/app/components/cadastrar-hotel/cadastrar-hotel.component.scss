@@ -59,7 +59,7 @@
       pointer-events: none;
     }
   
-    /* Quando o input está preenchido ou em foco */
+    
     .form-control:focus + .floating-label,
     .form-control:not(:placeholder-shown) + .floating-label {
       top: -0.75rem;

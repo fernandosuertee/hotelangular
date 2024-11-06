@@ -190,7 +190,7 @@ export class GerenciarReservaComponent implements OnInit {
 
   salvarEdicao(): void {
     if (this.reservaSelecionada) {
-      // Atualiza os campos da reserva selecionada
+    
       this.reservaSelecionada.dataCheckIn = this.editForm.dataCheckIn;
       this.reservaSelecionada.dataCheckOut = this.editForm.dataCheckOut;
       this.reservaSelecionada.numHospedes = this.editForm.numHospedes;
@@ -199,7 +199,7 @@ export class GerenciarReservaComponent implements OnInit {
       this.reservaSelecionada.hotelId = this.editForm.hotel.id;
       this.reservaSelecionada.quartoId = this.editForm.quarto.id;
 
-      // Atualizar informações do hóspede no array de hóspedes
+      
       const hospedeIndex = this.hospedes.findIndex(h => h.id === this.editForm.hospede.id);
       if (hospedeIndex !== -1) {
         this.hospedes[hospedeIndex].nome = this.editForm.nomeUsuario;
@@ -207,7 +207,7 @@ export class GerenciarReservaComponent implements OnInit {
         localStorage.setItem('clientes', JSON.stringify(this.hospedes));
       }
 
-      // Atualiza o localStorage das reservas
+      
       localStorage.setItem('reservas', JSON.stringify(this.reservas));
       alert(`Reserva com ID ${this.reservaSelecionada.id} atualizada com sucesso.`);
       this.fecharModal();
