@@ -37,81 +37,47 @@
     <div class="modal-content">
       <h5>Editar Quarto</h5>
       <div class="form-outline mb-4">
-        <input
-          type="text"
-          [(ngModel)]="editForm.numero"
-          id="numeroInput"
-          class="form-control"
-          placeholder=" "
-          required
-        />
-        <label class="floating-label" for="numeroInput">Número do Quarto</label>
+        <input [(ngModel)]="editForm.numero" type="text" id="numeroInput" class="form-control" required />
+        <label for="numeroInput">Número do Quarto</label>
       </div>
-
       <div class="form-outline mb-4">
-        <input
-          type="text"
-          [(ngModel)]="editForm.tipo"
-          id="tipoInput"
-          class="form-control"
-          placeholder=" "
-          required
-        />
-        <label class="floating-label" for="tipoInput">Tipo do Quarto</label>
-      </div>
-
-      <div class="form-outline mb-4">
-        <input
-          type="text"
-          [(ngModel)]="editForm.status"
-          id="statusInput"
-          class="form-control"
-          placeholder=" "
-          required
-        />
-        <label class="floating-label" for="statusInput">Status do Quarto</label>
-      </div>
-
-      <div class="form-outline mb-4">
-        <label for="hotelSelect" class="floating-label">Selecionar Hotel</label>
-        <select [(ngModel)]="editForm.hotel.id" id="hotelSelect" class="form-control" required>
+        <select [(ngModel)]="editForm.hotel.id" id="hotelSelect" class="form-control">
           <option *ngFor="let hotel of hoteis" [value]="hotel.id">{{ hotel.nome }}</option>
         </select>
+        <label for="hotelSelect">Hotel</label>
       </div>
-
-      <button type="button" class="btn btn-success btn-block" (click)="salvarEdicao()">Salvar Alterações</button>
-      <button type="button" class="btn btn-secondary btn-block" (click)="fecharModal()">Fechar</button>
+      <button class="btn btn-success" (click)="salvarEdicao()">Salvar</button>
     </div>
   </div>
 
-  <!-- Modal para detalhes -->
-  <div *ngIf="showDetailsModal" class="modal-overlay">
-    <div class="modal-content">
-      <h5>Detalhes do Quarto</h5>
-      <p><b>Número:</b> {{ quartoSelecionado?.numero }}</p>
-      <p><b>Tipo:</b> {{ quartoSelecionado?.tipo }}</p>
-      <p><b>Status:</b> {{ quartoSelecionado?.status }}</p>
-      <p><b>Hotel:</b> {{ quartoSelecionado?.hotel?.nome || 'Desconhecido' }}</p>
-      <button type="button" class="btn btn-secondary btn-block" (click)="fecharModal()">Fechar</button>
-    </div>
+ <!-- Modal para detalhes -->
+<div *ngIf="showDetailsModal && quartoSelecionado" class="modal-overlay">
+  <div class="modal-content">
+    <h5>Detalhes do Quarto</h5>
+    <p><b>Número:</b> {{ quartoSelecionado.numero }}</p>
+    <p><b>Tipo:</b> {{ quartoSelecionado.tipo }}</p>
+    <p><b>Status:</b> {{ quartoSelecionado.status }}</p>
+    <p><b>Hotel:</b> {{ quartoSelecionado.hotel.nome }}</p>
+    <button type="button" class="btn btn-secondary btn-block" (click)="fecharModal()">Fechar</button>
   </div>
+</div>
 
-  <!-- Modal para listar todos -->
-  <div *ngIf="showListAllModal" class="modal-overlay">
-    <div class="modal-content">
-      <h5>Lista de Todos os Quartos</h5>
-      <div *ngFor="let quarto of quartos">
-        <p>
-          <b>ID:</b> {{ quarto.id }} -
-          <b>Número:</b> {{ quarto.numero }} -
-          <b>Tipo:</b> {{ quarto.tipo }} -
-          <b>Hotel:</b> {{ quarto.hotel.nome || 'Desconhecido' }}
-        </p>
-      </div>
-      <button type="button" class="btn btn-secondary btn-block" (click)="fecharModal()">Fechar</button>
+
+<!-- Modal para listar todos -->
+<div *ngIf="showListAllModal" class="modal-overlay">
+  <div class="modal-content">
+    <h5>Lista de Todos os Quartos</h5>
+    <div *ngFor="let quarto of quartos">
+      <p>
+        <b>ID:</b> {{ quarto.id }} -
+        <b>Número:</b> {{ quarto.numero }} -
+        <b>Tipo:</b> {{ quarto.tipo }} -
+        <b>Hotel:</b> {{ quarto.hotel.nome }}
+      </p>
     </div>
+    <button type="button" class="btn btn-secondary btn-block" (click)="fecharModal()">Fechar</button>
   </div>
-
+</div>
 
   <footer class="footer">
     © 2024 Reserva Fácil. Todos os direitos reservados.

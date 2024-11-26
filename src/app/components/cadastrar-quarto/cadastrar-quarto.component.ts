@@ -2,17 +2,19 @@ import { Component } from '@angular/core';
 import { QuartoService } from '../../services/quarto.service';
 import { HotelService } from '../../services/hotel.service';
 import Swal from 'sweetalert2';
+import { Quarto } from '../../models/quarto';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-cadastrar-quarto',
   standalone: true,
-  imports: [CommonModule, FormsModule], // Inclua CommonModule e FormsModule
+  imports: [CommonModule, FormsModule],
   templateUrl: './cadastrar-quarto.component.html',
   styleUrls: ['./cadastrar-quarto.component.scss']
 })
 export class CadastrarQuartoComponent {
+
   numero: number | null = null;
   tipo: string = '';
   status: string = 'Disponível'; // Valor inicial fixo
@@ -123,12 +125,20 @@ export class CadastrarQuartoComponent {
       return;
     }
 
-    const novoQuarto = {
+    const hotelSelecionadoObj = this.hoteis.find(
+      (hotel) => hotel.id === Number(this.hotelSelecionado)
+    );
+
+    const novoQuarto: Quarto = {
       numero: this.numero!.toString(),
       tipo: this.tipo,
       status: this.status,
-      hotelId: Number(this.hotelSelecionado) // Certifique-se de que é um número
+      hotel: {
+        id: Number(this.hotelSelecionado),
+        nome: hotelSelecionadoObj?.nome || '',
+      },
     };
+    
 
     this.isLoading = true;
 
@@ -141,10 +151,10 @@ export class CadastrarQuartoComponent {
           icon: 'success',
           confirmButtonText: 'Ok'
         });
-
+        // Resetar os campos
         this.numero = null;
         this.tipo = '';
-        this.status = 'Disponível'; // Reseta o status
+        this.status = 'Disponível';
         this.hotelSelecionado = null;
         this.carregarQuartos();
       },
