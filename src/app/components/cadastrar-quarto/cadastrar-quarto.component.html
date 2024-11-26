@@ -9,26 +9,44 @@
 
       <div class="form-outline mb-4">
         <input type="text" [(ngModel)]="numero" id="numeroInput" class="form-control" placeholder=" " required />
-        <label class="form-label" for="numeroInput">Número do Quarto</label>
-      </div>
-
-      <div class="form-outline mb-4">
-        <input type="text" [(ngModel)]="tipo" id="tipoInput" class="form-control" placeholder=" " required />
-        <label class="form-label" for="tipoInput">Tipo do Quarto</label>
-      </div>
-
-      <div class="form-outline mb-4">
-        <input type="text" [(ngModel)]="status" id="statusInput" class="form-control" placeholder=" " required />
-        <label class="form-label" for="statusInput">Status do Quarto</label>
+        <label class="floating-label" for="numeroInput">Número do Quarto</label>
       </div>
 
 
-      <div class="form-outline mb-4">
-        <label for="hotelSelect" class="form-label">Selecionar Hotel</label>
-        <select [(ngModel)]="hotelSelecionado" id="hotelSelect" class="form-control" required>
+      <div class="form-outline mb-4" [ngClass]="{ 'has-value': tipo }">
+        <select [(ngModel)]="tipo" id="tipoSelect" class="form-control" required (change)="onSelectChange($event)">
+          <option value="" disabled [selected]="!tipo">Selecione o tipo do quarto</option>
+          <option value="Quarto solteiro">Quarto solteiro - Quarto com uma cama de solteiro, ideal para viagens a sós ou a negócios</option>
+          <option value="Quarto duplo solteiro">Quarto duplo solteiro - Quarto com duas ou mais camas de solteiro, ideal para viagens com amigos ou familiares</option>
+          <option value="Quarto casal">Quarto casal - Quarto com uma cama de casal, ideal para viagens a dois</option>
+          <option value="Quarto triplo">Quarto triplo - Quarto com três camas individuais, ideal para três pessoas</option>
+          <option value="Quarto quádruplo">Quarto quádruplo - Quarto com quatro camas, ideal para quatro pessoas</option>
+          <option value="Apartamento">Apartamento - Quarto com uma ou mais camas, além de um espaço generoso, similar ao de uma casa</option>
+          <option value="Dormitório">Dormitório - Quarto com várias camas (normalmente beliches), que são alugadas por diferentes hóspedes</option>
+          <option value="Master superior ou deluxe">Master superior ou deluxe</option>
+        </select>
+        <label class="floating-label" for="tipoSelect">Tipo do Quarto</label>
+      </div>
+
+
+      <div class="form-outline mb-4" [ngClass]="{ 'has-value': status }">
+        <select [(ngModel)]="status" id="statusSelect" class="form-control" required (change)="onSelectChange($event)">
+          <option value="" disabled [selected]="!status">Selecione o status</option>
+          <option value="Disponível">Disponível</option>
+          <option value="Manutenção">Manutenção</option>
+        </select>
+        <label class="floating-label" for="statusSelect">Status do Quarto</label>
+      </div>
+
+
+      <div class="form-outline mb-4" [ngClass]="{ 'has-value': hotelSelecionado }">
+        <select [(ngModel)]="hotelSelecionado" id="hotelSelect" class="form-control" required (change)="onSelectChange($event)">
+          <option value="" disabled [selected]="!hotelSelecionado">Selecione o hotel</option>
           <option *ngFor="let hotel of hoteis" [value]="hotel.id">{{ hotel.nome }}</option>
         </select>
+        <label class="floating-label" for="hotelSelect">Selecionar Hotel</label>
       </div>
+
 
       <div *ngIf="isLoading" class="d-flex justify-content-center mb-4">
         <div class="spinner-border text-primary" role="status">

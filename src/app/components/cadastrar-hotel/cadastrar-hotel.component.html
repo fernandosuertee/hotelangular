@@ -7,30 +7,68 @@
         </a>
       </div>
       <div class="form-outline mb-4">
-        <input type="text" [(ngModel)]="nome" id="nameInput" class="form-control" placeholder=" " required />
+        <input
+          type="text"
+          [(ngModel)]="nome"
+          (ngModelChange)="formatarNome($event)"
+          id="nameInput"
+          class="form-control"
+          placeholder=" "
+          required
+        />
         <label class="floating-label" for="nameInput">Nome do Hotel</label>
-      </div>
+      </div>      
 
       <div class="form-outline mb-4">
-        <input type="text" [(ngModel)]="endereco" id="addressInput" class="form-control" placeholder=" " required />
+        <input
+          type="text"
+          [(ngModel)]="endereco"
+          id="addressInput"
+          class="form-control"
+          placeholder=" "
+          required
+        />
         <label class="floating-label" for="addressInput">Endereço</label>
       </div>
 
       <div class="form-outline mb-4">
-        <textarea [(ngModel)]="descricao" id="descriptionInput" class="form-control" placeholder=" " required></textarea>
+        <textarea
+          [(ngModel)]="descricao"
+          id="descriptionInput"
+          class="form-control"
+          placeholder=" "
+          required
+        ></textarea>
         <label class="floating-label" for="descriptionInput">Descrição</label>
       </div>
 
       <div class="form-outline mb-4">
-        <input type="number" [(ngModel)]="numeroDeQuartos" id="roomCountInput" class="form-control" placeholder=" " required />
+        <input
+          type="number"
+          [(ngModel)]="numeroDeQuartos"
+          id="roomCountInput"
+          class="form-control"
+          placeholder=" "
+          min="1"
+          required
+        />
         <label class="floating-label" for="roomCountInput">Número de Quartos</label>
       </div>
+
       <div *ngIf="isLoading" class="d-flex justify-content-center mb-4">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Carregando...</span>
         </div>
       </div>
-      <button type="button" class="btn btn-primary btn-block mb-4" (click)="cadastrarHotel()" [disabled]="isLoading">Cadastrar Hotel</button>
+
+      <button
+        type="button"
+        class="btn btn-primary btn-block mb-4"
+        (click)="cadastrarHotel()"
+        [disabled]="isLoading"
+      >
+        Cadastrar Hotel
+      </button>
     </div>
   </div>
 

@@ -1,25 +1,19 @@
 import { Component } from '@angular/core';
+import { HotelService, Hotel } from '../../services/hotel.service';
+import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { Router } from '@angular/router';
-
-interface Hotel {
-  id: number;
-  nome: string;
-  endereco: string;
-  descricao: string;
-  numeroDeQuartos: number;
-}
 
 @Component({
   selector: 'app-gerenciar-hotel',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule], // Já está importado acima
   templateUrl: './gerenciar-hotel.component.html',
   styleUrls: ['./gerenciar-hotel.component.scss']
 })
+
 export class GerenciarHotelComponent {
-  hotelId: number | null = null;
+  hotelId: number | null = null; // Inicialmente null
   isLoading: boolean = false;
   hoteis: Hotel[] = [];
   hotelSelecionado: Hotel | null = null;
@@ -35,104 +29,187 @@ export class GerenciarHotelComponent {
     numeroDeQuartos: 0
   };
 
-  constructor(private router: Router) {
-    this.carregarHoteis();
-  }
+  constructor(private hotelService: HotelService) {}
 
-  carregarHoteis(): void {
-    const hoteisArmazenados = JSON.parse(localStorage.getItem('hoteis') || '[]');
-    this.hoteis = hoteisArmazenados.map((hotel: any, index: number) => ({
-      id: index + 1,
-      nome: hotel.nome,
-      endereco: hotel.endereco,
-      descricao: hotel.descricao,
-      numeroDeQuartos: hotel.numeroDeQuartos,
-    }));
+  listarHoteis(): void {
+    this.isLoading = true;
+    this.hotelService.getAllHotels().subscribe({
+      next: (hoteis) => {
+        this.isLoading = false;
+        this.hoteis = hoteis;
+        this.showListAllModal = true;
+      },
+      error: () => {
+        this.isLoading = false;
+        Swal.fire({
+          title: 'Erro',
+          text: 'Não foi possível carregar a lista de hotéis.',
+          icon: 'error',
+          confirmButtonText: 'Fechar'
+        });
+      }
+    });
   }
 
   verDetalhes(): void {
     if (this.hotelId === null || this.hotelId < 0) {
-      alert('Por favor, insira um ID de hotel válido.');
+      Swal.fire({
+        title: 'Erro',
+        text: 'Por favor, insira um ID de hotel válido.',
+        icon: 'error',
+        confirmButtonText: 'Fechar'
+      });
       return;
     }
 
+    const id = this.hotelId as number;
     this.isLoading = true;
-    setTimeout(() => {
-      this.hotelSelecionado = this.hoteis.find(hotel => hotel.id === this.hotelId) || null;
-      if (this.hotelSelecionado) {
+    this.hotelService.getHotelById(id).subscribe({
+      next: (hotel) => {
+        this.isLoading = false;
+        this.hotelSelecionado = hotel;
         this.showDetailsModal = true;
-      } else {
-        alert('Hotel não encontrado.');
+      },
+      error: () => {
+        this.isLoading = false;
+        Swal.fire({
+          title: 'Erro',
+          text: 'Hotel não encontrado.',
+          icon: 'error',
+          confirmButtonText: 'Fechar'
+        });
       }
-      this.isLoading = false;
-    }, 1000);
+    });
   }
 
   editarHotel(): void {
     if (this.hotelId === null || this.hotelId < 0) {
-      alert('Por favor, insira um ID de hotel válido.');
+      Swal.fire({
+        title: 'Erro',
+        text: 'Por favor, insira um ID de hotel válido.',
+        icon: 'error',
+        confirmButtonText: 'Fechar'
+      });
       return;
     }
 
+    const id = this.hotelId as number;
     this.isLoading = true;
-    setTimeout(() => {
-      const hotel = this.hoteis.find(hotel => hotel.id === this.hotelId);
-      if (hotel) {
-        this.editForm = {
-          nome: hotel.nome,
-          endereco: hotel.endereco,
-          descricao: hotel.descricao,
-          numeroDeQuartos: hotel.numeroDeQuartos
-        };
+    this.hotelService.getHotelById(id).subscribe({
+      next: (hotel) => {
+        this.isLoading = false;
+        this.editForm = { ...hotel };
         this.showEditModal = true;
-        this.hotelSelecionado = hotel;
-      } else {
-        alert('Hotel não encontrado para edição.');
+      },
+      error: () => {
+        this.isLoading = false;
+        Swal.fire({
+          title: 'Erro',
+          text: 'Hotel não encontrado para edição.',
+          icon: 'error',
+          confirmButtonText: 'Fechar'
+        });
       }
-      this.isLoading = false;
-    }, 1000);
+    });
+  }
+
+  salvarEdicao(): void {
+    if (this.hotelId === null) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'Erro ao identificar o hotel para edição.',
+        icon: 'error',
+        confirmButtonText: 'Fechar'
+      });
+      return;
+    }
+
+    const id = this.hotelId as number;
+    const hotelAtualizado: Hotel = {
+      id: id,
+      nome: this.editForm.nome,
+      endereco: this.editForm.endereco,
+      descricao: this.editForm.descricao,
+      numeroDeQuartos: this.editForm.numeroDeQuartos
+    };
+
+    this.isLoading = true;
+    this.hotelService.updateHotel(id, hotelAtualizado).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.fecharModal();
+        Swal.fire({
+          title: 'Sucesso',
+          text: 'Hotel atualizado com sucesso!',
+          icon: 'success',
+          confirmButtonText: 'Ok'
+        });
+      },
+      error: () => {
+        this.isLoading = false;
+        Swal.fire({
+          title: 'Erro',
+          text: 'Não foi possível atualizar o hotel.',
+          icon: 'error',
+          confirmButtonText: 'Fechar'
+        });
+      }
+    });
   }
 
   excluirHotel(): void {
     if (this.hotelId === null || this.hotelId < 0) {
-      alert('Por favor, insira um ID de hotel válido.');
+      Swal.fire({
+        title: 'Erro',
+        text: 'Por favor, insira um ID de hotel válido.',
+        icon: 'error',
+        confirmButtonText: 'Fechar'
+      });
       return;
     }
 
-    if (confirm(`Tem certeza de que deseja excluir o hotel com ID: ${this.hotelId}?`)) {
-      const index = this.hoteis.findIndex(hotel => hotel.id === this.hotelId);
-      if (index !== -1) {
-        this.hoteis.splice(index, 1);
-        localStorage.setItem('hoteis', JSON.stringify(this.hoteis));
-        alert(`Hotel com ID ${this.hotelId} foi excluído.`);
-        this.hotelSelecionado = null;
-        this.hotelId = null;
-      } else {
-        alert('Hotel não encontrado para exclusão.');
+    const id = this.hotelId as number;
+    Swal.fire({
+      title: 'Tem certeza?',
+      text: 'Esta ação não poderá ser desfeita.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sim, excluir',
+      cancelButtonText: 'Cancelar'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.isLoading = true;
+        this.hotelService.deleteHotel(id).subscribe({
+          next: () => {
+            this.isLoading = false;
+            Swal.fire({
+              title: 'Sucesso',
+              text: 'Hotel excluído com sucesso!',
+              icon: 'success',
+              confirmButtonText: 'Ok'
+            });
+          },
+          error: () => {
+            this.isLoading = false;
+            Swal.fire({
+              title: 'Erro',
+              text: 'Não foi possível excluir o hotel.',
+              icon: 'error',
+              confirmButtonText: 'Fechar'
+            });
+          }
+        });
       }
-    }
-  }
+    });
 
-  listarHoteis(): void {
-    this.showListAllModal = true;
+    
   }
 
   fecharModal(): void {
     this.showEditModal = false;
     this.showDetailsModal = false;
     this.showListAllModal = false;
-    this.hotelSelecionado = null;
   }
-
-  salvarEdicao(): void {
-    if (this.hotelSelecionado) {
-      this.hotelSelecionado.nome = this.editForm.nome;
-      this.hotelSelecionado.endereco = this.editForm.endereco;
-      this.hotelSelecionado.descricao = this.editForm.descricao;
-      this.hotelSelecionado.numeroDeQuartos = this.editForm.numeroDeQuartos;
-      localStorage.setItem('hoteis', JSON.stringify(this.hoteis));
-      alert(`Hotel com ID ${this.hotelSelecionado.id} atualizado com sucesso.`);
-      this.fecharModal();
-    }
-  }
+  
+  
 }
