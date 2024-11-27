@@ -7,56 +7,87 @@
         </a>
       </div>
 
-      <div class="form-outline mb-4">
-        <input type="text" [(ngModel)]="numero" id="numeroInput" class="form-control" placeholder=" " required />
-        <label class="floating-label" for="numeroInput">Número do Quarto</label>
-      </div>
+      <app-input
+        type="number"
+        [(model)]="numero"
+        id="numeroInput"
+        label="Número do Quarto"
+        placeholder="Digite o número do quarto"
+      ></app-input>
+    
 
+  <div class="form-outline mb-4">
+    <select [(ngModel)]="tipo" id="tipoSelect" class="form-control" required>
+      <option value="" disabled [selected]="!tipo">Selecione o tipo do quarto</option>
+      <option value="Quarto Solteiro">Quarto Solteiro (até 1 hóspede)</option>
+      <option value="Quarto Casal">Quarto Casal (1 a 2 hóspedes)</option>
+      <option value="Quarto Triplo">Quarto Triplo (1 a 3 hóspedes)</option>
+      <option value="Apartamento">Apartamento (1 a 7 hóspedes)</option>
+      <option value="Master Deluxe">Master Deluxe Casal (1 a 2 hóspedes)</option>
+    </select>
+    <label class="floating-label" for="tipoSelect">Tipo do Quarto</label>
+  </div>
 
-      <div class="form-outline mb-4" [ngClass]="{ 'has-value': tipo }">
-        <select [(ngModel)]="tipo" id="tipoSelect" class="form-control" required (change)="onSelectChange($event)">
-          <option value="" disabled [selected]="!tipo">Selecione o tipo do quarto</option>
-          <option value="Quarto solteiro">Quarto solteiro - Quarto com uma cama de solteiro, ideal para viagens a sós ou a negócios</option>
-          <option value="Quarto duplo solteiro">Quarto duplo solteiro - Quarto com duas ou mais camas de solteiro, ideal para viagens com amigos ou familiares</option>
-          <option value="Quarto casal">Quarto casal - Quarto com uma cama de casal, ideal para viagens a dois</option>
-          <option value="Quarto triplo">Quarto triplo - Quarto com três camas individuais, ideal para três pessoas</option>
-          <option value="Quarto quádruplo">Quarto quádruplo - Quarto com quatro camas, ideal para quatro pessoas</option>
-          <option value="Apartamento">Apartamento - Quarto com uma ou mais camas, além de um espaço generoso, similar ao de uma casa</option>
-          <option value="Dormitório">Dormitório - Quarto com várias camas (normalmente beliches), que são alugadas por diferentes hóspedes</option>
-          <option value="Master superior ou deluxe">Master superior ou deluxe</option>
-        </select>
-        <label class="floating-label" for="tipoSelect">Tipo do Quarto</label>
-      </div>
+  <div class="form-outline mb-4">
+    <select [(ngModel)]="status" id="statusSelect" class="form-control" required>
+      <option value="" disabled [selected]="!status">Selecione o status</option>
+      <option value="Disponível">Disponível</option>
+      <option value="Manutenção">Manutenção</option>
+    </select>
+    <label class="floating-label" for="statusSelect">Status do Quarto</label>
+  </div>
 
+  <div class="form-outline mb-4">
+    <select [(ngModel)]="hotelSelecionado" id="hotelSelect" class="form-control" required>
+      <option value="" disabled [selected]="!hotelSelecionado">Selecione o hotel</option>
+      <option *ngFor="let hotel of hoteis" [value]="hotel.id">{{ hotel.nome }}</option>
+    </select>
+    <label class="floating-label" for="hotelSelect">Selecionar Hotel</label>
+  </div>
 
-      <div class="form-outline mb-4" [ngClass]="{ 'has-value': status }">
-        <select [(ngModel)]="status" id="statusSelect" class="form-control" required (change)="onSelectChange($event)">
-          <option value="" disabled [selected]="!status">Selecione o status</option>
-          <option value="Disponível">Disponível</option>
-          <option value="Manutenção">Manutenção</option>
-        </select>
-        <label class="floating-label" for="statusSelect">Status do Quarto</label>
-      </div>
+  <div class="form-row">
+    <div class="form-outline half-width">
+      <app-input
+        type="number"
+        [(model)]="capacidadeMinima"
+        id="capacidadeMinimaInput"
+        [min]="capacidadeMinimaMinima"
+        [max]="capacidadeMinimaMaxima"
+        label="Capacidade Mínima"
+        placeholder="Digite a capacidade mínima"
+        (change)="validarCapacidade()"
+      ></app-input>
+    </div>
+  
+    <div class="form-outline half-width">
+      <app-input
+        type="number"
+        [(model)]="capacidadeMaxima"
+        id="capacidadeMaximaInput"
+        [min]="capacidadeMaximaMinima"
+        [max]="capacidadeMaximaMaxima"
+        label="Capacidade Máxima"
+        placeholder="Digite a capacidade máxima"
+        (change)="validarCapacidade()"
+      ></app-input>
+    </div>
+  </div>
 
-
-      <div class="form-outline mb-4" [ngClass]="{ 'has-value': hotelSelecionado }">
-        <select [(ngModel)]="hotelSelecionado" id="hotelSelect" class="form-control" required (change)="onSelectChange($event)">
-          <option value="" disabled [selected]="!hotelSelecionado">Selecione o hotel</option>
-          <option *ngFor="let hotel of hoteis" [value]="hotel.id">{{ hotel.nome }}</option>
-        </select>
-        <label class="floating-label" for="hotelSelect">Selecionar Hotel</label>
-      </div>
-
-
-      <div *ngIf="isLoading" class="d-flex justify-content-center mb-4">
-        <div class="spinner-border text-primary" role="status">
-          <span class="visually-hidden">Carregando...</span>
-        </div>
-      </div>
-
-      <button type="button" class="btn btn-primary btn-block mb-4" (click)="cadastrarQuarto()" [disabled]="isLoading">
+      <button
+        type="button"
+        class="btn btn-primary btn-block mb-4"
+        (click)="cadastrarQuarto()"
+        [disabled]="isLoading"
+      >
         Cadastrar Quarto
       </button>
+    </div>
+  </div>
+  
+
+  <div *ngIf="isLoading" class="d-flex justify-content-center mb-4">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Carregando...</span>
     </div>
   </div>
 

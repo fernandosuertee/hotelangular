@@ -1,0 +1,41 @@
+.form-outline {
+  position: relative;
+  margin-bottom: 1rem;
+
+  .form-control {
+    background-color: #ffffff; /* Fundo branco */
+    color: #000; /* Texto preto */
+    border: 1px solid #ccc; /* Borda cinza */
+    padding: 0.75rem; /* Espaçamento interno */
+    border-radius: 5px; /* Bordas arredondadas */
+    font-size: 1rem; /* Tamanho da fonte */
+    width: 100%; /* Garantir que ocupe o espaço do pai */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1); /* Sombra sutil */
+  }
+
+  .form-control:focus {
+    border-color: #0056b3; /* Cor da borda ao focar */
+    outline: none; /* Remove o contorno padrão */
+    box-shadow: 0px 0px 6px rgba(0, 86, 179, 0.5); /* Sombra azul clara */
+  }
+
+  .floating-label {
+    position: absolute;
+    top: 0.75rem;
+    left: 0.75rem;
+    font-size: 1rem;
+    color: #777; /* Texto cinza */
+    transition: all 0.3s ease; /* Transição suave */
+    pointer-events: none;
+  }
+
+  .form-control:focus + .floating-label,
+  .form-control:not(:placeholder-shown) + .floating-label {
+    top: -0.75rem;
+    left: 0.5rem;
+    font-size: 0.75rem;
+    color: #333;
+    background-color: #fff;
+    padding: 0 0.25rem;
+  }
+}

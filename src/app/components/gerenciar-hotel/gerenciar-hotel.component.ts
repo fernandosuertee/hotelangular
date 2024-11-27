@@ -7,13 +7,12 @@ import { CommonModule } from '@angular/common';
 @Component({
   selector: 'app-gerenciar-hotel',
   standalone: true,
-  imports: [FormsModule, CommonModule], // Já está importado acima
+  imports: [FormsModule, CommonModule],
   templateUrl: './gerenciar-hotel.component.html',
   styleUrls: ['./gerenciar-hotel.component.scss']
 })
-
 export class GerenciarHotelComponent {
-  hotelId: number | null = null; // Inicialmente null
+  hotelId: number | null = null;
   isLoading: boolean = false;
   hoteis: Hotel[] = [];
   hotelSelecionado: Hotel | null = null;
@@ -61,13 +60,12 @@ export class GerenciarHotelComponent {
       });
       return;
     }
-
-    const id = this.hotelId as number;
+  
     this.isLoading = true;
-    this.hotelService.getHotelById(id).subscribe({
+    this.hotelService.getHotelById(this.hotelId).subscribe({
       next: (hotel) => {
         this.isLoading = false;
-        this.hotelSelecionado = hotel;
+        this.hotelSelecionado = hotel; // Certifique-se de que `quartosCadastrados` seja carregado aqui
         this.showDetailsModal = true;
       },
       error: () => {
@@ -80,7 +78,7 @@ export class GerenciarHotelComponent {
         });
       }
     });
-  }
+  }  
 
   editarHotel(): void {
     if (this.hotelId === null || this.hotelId < 0) {
@@ -93,9 +91,8 @@ export class GerenciarHotelComponent {
       return;
     }
 
-    const id = this.hotelId as number;
     this.isLoading = true;
-    this.hotelService.getHotelById(id).subscribe({
+    this.hotelService.getHotelById(this.hotelId).subscribe({
       next: (hotel) => {
         this.isLoading = false;
         this.editForm = { ...hotel };
@@ -113,20 +110,72 @@ export class GerenciarHotelComponent {
     });
   }
 
-  salvarEdicao(): void {
-    if (this.hotelId === null) {
+  validarEdicao(): boolean {
+    if (!this.editForm.nome.trim()) {
       Swal.fire({
         title: 'Erro',
-        text: 'Erro ao identificar o hotel para edição.',
+        text: 'O nome do hotel não pode estar vazio.',
         icon: 'error',
         confirmButtonText: 'Fechar'
       });
+      return false;
+    }
+  
+    if (!this.editForm.endereco.trim()) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'O endereço não pode estar vazio.',
+        icon: 'error',
+        confirmButtonText: 'Fechar'
+      });
+      return false;
+    }
+  
+    if (!this.editForm.descricao.trim()) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'A descrição não pode estar vazia.',
+        icon: 'error',
+        confirmButtonText: 'Fechar'
+      });
+      return false;
+    }
+  
+    if (this.editForm.numeroDeQuartos <= 0) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'O número de quartos deve ser maior que zero.',
+        icon: 'error',
+        confirmButtonText: 'Fechar'
+      });
+      return false;
+    }
+  
+    if (this.hotelSelecionado) {
+      const quartosCadastrados = this.hotelSelecionado?.quartosCadastrados ?? 0;// Garantindo que a propriedade exista
+  
+      if (this.editForm.numeroDeQuartos < quartosCadastrados) {
+        Swal.fire({
+          title: 'Erro',
+          text: `O número de quartos deve ser maior ou igual ao número de quartos já cadastrados (${quartosCadastrados}).`,
+          icon: 'error',
+          confirmButtonText: 'Fechar'
+        });
+        return false;
+      }
+    }
+  
+    return true;
+  }
+  
+
+  salvarEdicao(): void {
+    if (!this.validarEdicao()) {
       return;
     }
 
-    const id = this.hotelId as number;
     const hotelAtualizado: Hotel = {
-      id: id,
+      id: this.hotelId!,
       nome: this.editForm.nome,
       endereco: this.editForm.endereco,
       descricao: this.editForm.descricao,
@@ -134,7 +183,7 @@ export class GerenciarHotelComponent {
     };
 
     this.isLoading = true;
-    this.hotelService.updateHotel(id, hotelAtualizado).subscribe({
+    this.hotelService.updateHotel(this.hotelId!, hotelAtualizado).subscribe({
       next: () => {
         this.isLoading = false;
         this.fecharModal();
@@ -144,6 +193,7 @@ export class GerenciarHotelComponent {
           icon: 'success',
           confirmButtonText: 'Ok'
         });
+        this.listarHoteis();
       },
       error: () => {
         this.isLoading = false;
@@ -168,7 +218,7 @@ export class GerenciarHotelComponent {
       return;
     }
 
-    const id = this.hotelId as number;
+    const id = this.hotelId;
     Swal.fire({
       title: 'Tem certeza?',
       text: 'Esta ação não poderá ser desfeita.',
@@ -179,7 +229,7 @@ export class GerenciarHotelComponent {
     }).then((result) => {
       if (result.isConfirmed) {
         this.isLoading = true;
-        this.hotelService.deleteHotel(id).subscribe({
+        this.hotelService.deleteHotel(id!).subscribe({
           next: () => {
             this.isLoading = false;
             Swal.fire({
@@ -201,8 +251,6 @@ export class GerenciarHotelComponent {
         });
       }
     });
-
-    
   }
 
   fecharModal(): void {
@@ -210,6 +258,5 @@ export class GerenciarHotelComponent {
     this.showDetailsModal = false;
     this.showListAllModal = false;
   }
-  
-  
+
 }

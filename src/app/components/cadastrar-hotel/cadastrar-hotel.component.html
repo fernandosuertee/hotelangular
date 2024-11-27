@@ -6,54 +6,40 @@
           <img src="assets/reservafacil.png" alt="Reserva Fácil" class="img-fluid" />
         </a>
       </div>
-      <div class="form-outline mb-4">
-        <input
-          type="text"
-          [(ngModel)]="nome"
-          (ngModelChange)="formatarNome($event)"
-          id="nameInput"
-          class="form-control"
-          placeholder=" "
-          required
-        />
-        <label class="floating-label" for="nameInput">Nome do Hotel</label>
-      </div>      
 
-      <div class="form-outline mb-4">
-        <input
-          type="text"
-          [(ngModel)]="endereco"
-          id="addressInput"
-          class="form-control"
-          placeholder=" "
-          required
-        />
-        <label class="floating-label" for="addressInput">Endereço</label>
-      </div>
+      <app-input
+        type="text"
+        [(model)]="nome"
+        id="nameInput"
+        label="Nome do Hotel"
+        placeholder=" "
+        (input)="formatarNome(nome)"
+      ></app-input>
 
-      <div class="form-outline mb-4">
-        <textarea
-          [(ngModel)]="descricao"
-          id="descriptionInput"
-          class="form-control"
-          placeholder=" "
-          required
-        ></textarea>
-        <label class="floating-label" for="descriptionInput">Descrição</label>
-      </div>
 
-      <div class="form-outline mb-4">
-        <input
-          type="number"
-          [(ngModel)]="numeroDeQuartos"
-          id="roomCountInput"
-          class="form-control"
-          placeholder=" "
-          min="1"
-          required
-        />
-        <label class="floating-label" for="roomCountInput">Número de Quartos</label>
-      </div>
+      <app-input
+        type="text"
+        [(model)]="endereco"
+        id="addressInput"
+        label="Endereço"
+        placeholder=" "
+      ></app-input>
+
+      <app-input
+        type="text"
+        [(model)]="descricao"
+        id="descriptionInput"
+        label="Descrição"
+        placeholder=" "
+      ></app-input>
+
+      <app-input
+        type="number"
+        [(model)]="numeroDeQuartos"
+        id="roomCountInput"
+        label="Número de Quartos"
+        placeholder=" "
+      ></app-input>
 
       <div *ngIf="isLoading" class="d-flex justify-content-center mb-4">
         <div class="spinner-border text-primary" role="status">
@@ -69,6 +55,7 @@
       >
         Cadastrar Hotel
       </button>
+
     </div>
   </div>
 

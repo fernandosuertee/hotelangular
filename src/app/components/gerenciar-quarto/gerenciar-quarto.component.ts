@@ -5,17 +5,16 @@ import Swal from 'sweetalert2';
 import { Quarto } from '../../models/quarto';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-
+import { InputComponent } from '../../shared/input/input.component';
 
 @Component({
   selector: 'app-gerenciar-quarto',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, InputComponent], // Importando InputComponent
   templateUrl: './gerenciar-quarto.component.html',
   styleUrls: ['./gerenciar-quarto.component.scss'],
 })
 export class GerenciarQuartoComponent {
-
   quartoId: number | null = null; // ID para busca, edição ou exclusão
   isLoading: boolean = false;
   quartos: Quarto[] = [];
@@ -30,17 +29,9 @@ export class GerenciarQuartoComponent {
     numero: '',
     tipo: '',
     status: '',
-    hotel: { id: 0, nome: '' }, // Alterado de null para 0
+    hotel: { id: 0, nome: '' },
   };
 
-  quartoForm = {
-    numero: '',
-    tipo: '',
-    status: '',
-    hotelId: 0, // Valor padrão inicial
-  };
-  
-  
   constructor(private quartoService: QuartoService, private hotelService: HotelService) {
     this.carregarHoteis();
     this.carregarQuartos();
@@ -60,33 +51,55 @@ export class GerenciarQuartoComponent {
   carregarQuartos(): void {
     this.quartoService.getAllQuartos().subscribe({
       next: (quartos) => {
-        this.quartos = quartos.map((quarto) => ({
-          ...quarto,
-          hotel: quarto.hotel != null ? quarto.hotel : { id: 0, nome: 'Desconhecido' },
-        }));
+        this.quartos = quartos;
       },
       error: () => {
         Swal.fire('Erro', 'Não foi possível carregar os quartos.', 'error');
       },
     });
-  }  
+  }
+
+  verDetalhes(): void {
+    if (!this.quartoId) {
+      Swal.fire('Erro', 'Por favor, insira um ID de quarto válido.', 'error');
+      return;
+    }
+
+    this.isLoading = true;
+    this.quartoService.getQuartoById(this.quartoId).subscribe({
+      next: (quarto) => {
+        this.isLoading = false;
+        this.quartoSelecionado = quarto; // Armazena os dados do quarto selecionado
+        this.showDetailsModal = true; // Exibe o modal de detalhes
+      },
+      error: () => {
+        this.isLoading = false;
+        Swal.fire('Erro', 'Quarto não encontrado.', 'error');
+      },
+    });
+  }
+
+  listarQuartos(): void {
+    this.showListAllModal = true; // Exibe o modal com todos os quartos
+  }
 
   editarQuarto(): void {
     if (!this.quartoId) {
       Swal.fire('Erro', 'Por favor, insira um ID de quarto válido.', 'error');
       return;
     }
-  
+
+    this.isLoading = true;
     this.quartoService.getQuartoById(this.quartoId).subscribe({
       next: (quarto: Quarto) => {
         this.isLoading = false;
-  
+
         this.editForm = {
           numero: quarto.numero,
           tipo: quarto.tipo,
           status: quarto.status,
           hotel: {
-            id: quarto.hotel.id,
+            id: quarto.hotel.id!,
             nome: quarto.hotel.nome,
           },
         };
@@ -98,11 +111,51 @@ export class GerenciarQuartoComponent {
       },
     });
   }
-  
+
+  validarCamposEdicao(): boolean {
+    if (!this.editForm.numero || !this.editForm.tipo || !this.editForm.status) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'Todos os campos obrigatórios devem ser preenchidos.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
+      return false;
+    }
+
+    if (parseInt(this.editForm.numero) <= 0) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'O número do quarto deve ser um valor positivo.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
+      return false;
+    }
+
+    // Verificar se já existe um quarto com este número no mesmo hotel, excluindo o próprio quarto sendo editado
+    const quartoDuplicado = this.quartos.find(
+      (quarto) =>
+        quarto.numero === this.editForm.numero &&
+        quarto.hotel.id === this.editForm.hotel.id &&
+        quarto.id !== this.quartoId
+    );
+
+    if (quartoDuplicado) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'Já existe um quarto com este número no mesmo hotel.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
+      return false;
+    }
+
+    return true;
+  }
 
   salvarEdicao(): void {
-    if (this.editForm.hotel.id === 0) {
-      Swal.fire('Erro', 'Por favor, selecione um hotel válido.', 'error');
+    if (!this.validarCamposEdicao()) {
       return;
     }
 
@@ -112,7 +165,7 @@ export class GerenciarQuartoComponent {
       tipo: this.editForm.tipo,
       status: this.editForm.status,
       hotel: {
-        id: this.editForm.hotel.id,
+        id: this.editForm.hotel.id!,
         nome: this.editForm.hotel.nome,
       },
     };
@@ -131,58 +184,6 @@ export class GerenciarQuartoComponent {
       },
     });
   }
-  
-
-  fecharModal(): void {
-    this.showEditModal = false;
-    this.showDetailsModal = false;
-    this.showListAllModal = false;
-  }
-
-  verDetalhes(): void {
-    if (!this.quartoId) {
-      Swal.fire('Erro', 'Por favor, insira um ID de quarto válido.', 'error');
-      return;
-    }
-  
-    this.isLoading = true;
-    this.quartoService.getQuartoById(this.quartoId).subscribe({
-      next: (quarto) => {
-        this.isLoading = false;
-        this.quartoSelecionado = quarto;
-        this.showDetailsModal = true;
-      },
-      error: () => {
-        this.isLoading = false;
-        Swal.fire('Erro', 'Quarto não encontrado.', 'error');
-      },
-    });
-  }
-  
-  
-  listarQuartos(): void {
-    this.showListAllModal = true;
-  }
-
-  cadastrarQuarto(): void {
-    const novoQuarto: Quarto = {
-      numero: this.quartoForm.numero,
-      tipo: this.quartoForm.tipo,
-      status: this.quartoForm.status,
-      hotel: { id: this.quartoForm.hotelId, nome: '' }, // Passa um objeto hotel com ID
-    };
-  
-    this.quartoService.createQuarto(novoQuarto).subscribe({
-      next: () => {
-        Swal.fire('Sucesso', 'Quarto cadastrado com sucesso.', 'success');
-        this.carregarQuartos(); // Atualiza a lista de quartos
-      },
-      error: () => {
-        Swal.fire('Erro', 'Não foi possível cadastrar o quarto.', 'error');
-      },
-    });
-  }
-  
 
   excluirQuarto(): void {
     if (!this.quartoId) {
@@ -190,6 +191,7 @@ export class GerenciarQuartoComponent {
       return;
     }
 
+    // Confirmação para exclusão
     Swal.fire({
       title: 'Confirmar exclusão',
       text: 'Tem certeza que deseja excluir este quarto?',
@@ -206,12 +208,29 @@ export class GerenciarQuartoComponent {
             this.carregarQuartos();
             Swal.fire('Sucesso', 'Quarto excluído com sucesso.', 'success');
           },
-          error: () => {
+          error: (err) => {
             this.isLoading = false;
-            Swal.fire('Erro', 'Não foi possível excluir o quarto.', 'error');
+
+            if (err.error.message.includes('ocupado')) {
+              Swal.fire(
+                'Erro',
+                'Não é possível excluir um quarto com status de ocupado.',
+                'error'
+              );
+            } else {
+              Swal.fire('Erro', 'Não foi possível excluir o quarto.', 'error');
+            }
           },
         });
       }
     });
+  }
+
+  
+
+  fecharModal(): void {
+    this.showEditModal = false;
+    this.showDetailsModal = false;
+    this.showListAllModal = false;
   }
 }

@@ -8,7 +8,9 @@ export interface Hotel {
   endereco: string;
   descricao: string;
   numeroDeQuartos: number;
+  quartosCadastrados?: number; // Adicione esta linha
 }
+
 
 @Injectable({
   providedIn: 'root'

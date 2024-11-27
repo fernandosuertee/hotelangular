@@ -1,95 +1,66 @@
 .main-container {
-    height: 100vh;
-    display: flex;
-    flex-direction: column;
-    font-family: 'Roboto', sans-serif;
-    background-color: #e3e4df;
-  }
-  
-  
-  .container {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center; 
-    align-items: center; 
-    max-width: 100%;
-    padding: 15px;
-  }
-  
-  .col-md-6, .col-lg-4 {
-    padding: 0 15px;
-  }
-  
-  .bg-image img {
-    max-width: 80%;
-    height: auto;
-  }
-  
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Roboto', sans-serif;
+  background-color: #e3e4df;
+}
+
+.container {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+  padding: 15px;
+  padding-bottom: 2rem; /* Adicionado para espaço responsivo no botão */
+}
+
+.col-md-6, .col-lg-4 {
+  padding: 0 15px;
+}
+
+.bg-image img {
+  max-width: 80%;
+  height: auto;
+}
+
+.form-control {
+  background-color: #ffffff !important;
+  border: 1px solid #ccc;
+  color: #000;
+}
+
+.btn-primary {
+  background-color: #0056b3;
+  color: #fff;
+}
+
+.form-outline {
+  position: relative;
+  margin-bottom: 1rem;
+
   .form-control {
-    background-color: #ffffff !important;
     border: 1px solid #ccc;
+    padding: 0.5rem 0.75rem;
+    background-color: #ffffff;
     color: #000;
-  }
-  
-  .btn-primary {
-    background-color: #0056b3;
-    color: #fff;
-  }
-  
-  .form-outline {
-    position: relative;
-    margin-bottom: 1rem;
-  
-    .form-control {
-      border: 1px solid #ccc;
-      padding: 0.5rem 0.75rem;
-      background-color: #ffffff;
-      color: #000;
-      font-size: 1rem;
-    }
-  
-    .floating-label {
-      position: absolute;
-      top: 0.5rem;
-      left: 0.75rem;
-      font-size: 1rem;
-      color: #777;
-      transition: all 0.3s ease;
-      
-      pointer-events: none;
-    }
-  
-   
-    .form-control:focus + .floating-label,
-    .form-control:not(:placeholder-shown) + .floating-label {
-      top: -0.75rem;
-      left: 0.5rem;
-      font-size: 0.75rem;
-      color: #333;
-      background-color: #fff;
-      padding: 0 0.25rem;
-    }
-  }
-  
-  
-  
-  .footer {
-    background-color: #e3e4df;
-    color: #333;
-    font-weight: bold;
-    text-align: center;
-    padding: 15px;
+    font-size: 1rem;
+    border-radius: 5px; /* Bordas arredondadas */
     width: 100%;
-    position: fixed;
-    bottom: 0;
-    left: 0;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
   }
-  
+
+  .form-control:focus {
+    border-color: #0056b3;
+    outline: none;
+    box-shadow: 0px 0px 6px rgba(0, 86, 179, 0.5);
+  }
 
   .floating-label {
     position: absolute;
-    top: 0.5rem;
+    top: 0.75rem;
     left: 0.75rem;
     font-size: 1rem;
     color: #777;
@@ -106,4 +77,66 @@
     background-color: #fff;
     padding: 0 0.25rem;
   }
+}
 
+.footer {
+  background-color: #e3e4df;
+  color: #333;
+  font-weight: bold;
+  text-align: center;
+  padding: 15px;
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+}
+
+.floating-label {
+  position: absolute;
+  top: 0.5rem;
+  left: 0.75rem;
+  font-size: 1rem;
+  color: #777;
+  transition: all 0.3s ease;
+  pointer-events: none;
+}
+
+.form-control:focus + .floating-label,
+.form-control:not(:placeholder-shown) + .floating-label {
+  top: -0.75rem;
+  left: 0.5rem;
+  font-size: 0.75rem;
+  color: #333;
+  background-color: #fff;
+  padding: 0 0.25rem;
+}
+
+/* Ajustes específicos para os campos de capacidade e o botão */
+.form-row {
+  display: flex;
+  justify-content: space-between; /* Espaço igual entre os elementos */
+  gap: 15px; /* Espaçamento horizontal entre os campos */
+  margin-bottom: 0.5rem; /* Reduz o espaço abaixo */
+}
+
+.form-outline.half-width {
+  flex: 1; /* Cada campo ocupa metade da largura disponível */
+  max-width: 48%; /* Garante que eles não ultrapassem 48% da largura total */
+}
+
+.btn-block {
+  margin-top: 0.5rem; /* Aproxima o botão dos campos */
+  width: 100%; /* Garante que o botão ocupe toda a largura */
+}
+
+/* Estilo responsivo para telas menores */
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column; /* Alinha verticalmente os campos */
+    gap: 0.75rem; /* Ajusta o espaçamento entre os campos */
+  }
+
+  .form-outline.half-width {
+    max-width: 100%; /* Campos ocupam 100% da largura no mobile */
+  }
+}

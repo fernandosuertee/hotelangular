@@ -7,23 +7,22 @@
         </a>
       </div>
 
-      <div class="form-outline mb-4">
-        <input
-          type="number"
-          [(ngModel)]="quartoId"
-          id="quartoIdInput"
-          class="form-control"
-          placeholder=" "
-          required
-        />
-        <label class="floating-label" for="quartoIdInput">ID do Quarto</label>
-      </div>
+      <!-- Input para ID do Quarto -->
+      <app-input
+        type="number"
+        [(model)]="quartoId"
+        id="quartoIdInput"
+        label="ID do Quarto"
+        placeholder="Digite o ID do quarto"
+      ></app-input>
 
+      <!-- Botões principais -->
       <button type="button" class="btn btn-info btn-block mb-2" (click)="verDetalhes()">Ver Detalhes</button>
       <button type="button" class="btn btn-primary btn-block mb-2" (click)="editarQuarto()">Alterar Quarto</button>
       <button type="button" class="btn btn-danger btn-block mb-2" (click)="excluirQuarto()">Excluir</button>
       <button type="button" class="btn btn-secondary btn-block mb-4" (click)="listarQuartos()">Listar Todos</button>
 
+      <!-- Loader durante a operação -->
       <div *ngIf="isLoading" class="d-flex justify-content-center mb-4">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Carregando...</span>
@@ -32,52 +31,61 @@
     </div>
   </div>
 
-  <!-- Modal para edição -->
+  <!-- Modal para editar quarto -->
   <div *ngIf="showEditModal" class="modal-overlay">
     <div class="modal-content">
+      <button class="close-button" (click)="fecharModal()">×</button>
       <h5>Editar Quarto</h5>
-      <div class="form-outline mb-4">
-        <input [(ngModel)]="editForm.numero" type="text" id="numeroInput" class="form-control" required />
-        <label for="numeroInput">Número do Quarto</label>
-      </div>
+      <!-- Input para Número do Quarto -->
+      <app-input
+        type="text"
+        [(model)]="editForm.numero"
+        id="numeroInput"
+        label="Número do Quarto"
+        placeholder="Digite o número do quarto"
+      ></app-input>
+
+      <!-- Select para Hotel -->
       <div class="form-outline mb-4">
         <select [(ngModel)]="editForm.hotel.id" id="hotelSelect" class="form-control">
           <option *ngFor="let hotel of hoteis" [value]="hotel.id">{{ hotel.nome }}</option>
         </select>
-        <label for="hotelSelect">Hotel</label>
+        <label class="floating-label" for="hotelSelect">Selecionar Hotel</label>
       </div>
-      <button class="btn btn-success" (click)="salvarEdicao()">Salvar</button>
+
+      <button type="button" class="btn btn-success btn-block mb-4" (click)="salvarEdicao()">Salvar</button>
     </div>
   </div>
 
- <!-- Modal para detalhes -->
-<div *ngIf="showDetailsModal && quartoSelecionado" class="modal-overlay">
-  <div class="modal-content">
-    <h5>Detalhes do Quarto</h5>
-    <p><b>Número:</b> {{ quartoSelecionado.numero }}</p>
-    <p><b>Tipo:</b> {{ quartoSelecionado.tipo }}</p>
-    <p><b>Status:</b> {{ quartoSelecionado.status }}</p>
-    <p><b>Hotel:</b> {{ quartoSelecionado.hotel.nome }}</p>
-    <button type="button" class="btn btn-secondary btn-block" (click)="fecharModal()">Fechar</button>
-  </div>
-</div>
-
-
-<!-- Modal para listar todos -->
-<div *ngIf="showListAllModal" class="modal-overlay">
-  <div class="modal-content">
-    <h5>Lista de Todos os Quartos</h5>
-    <div *ngFor="let quarto of quartos">
-      <p>
-        <b>ID:</b> {{ quarto.id }} -
-        <b>Número:</b> {{ quarto.numero }} -
-        <b>Tipo:</b> {{ quarto.tipo }} -
-        <b>Hotel:</b> {{ quarto.hotel.nome }}
-      </p>
+  <!-- Modal para detalhes -->
+  <div *ngIf="showDetailsModal && quartoSelecionado" class="modal-overlay">
+    <div class="modal-content">
+      <h5>Detalhes do Quarto</h5>
+      <p><b>ID:</b> {{ quartoSelecionado.id }}</p>
+      <p><b>Número:</b> {{ quartoSelecionado.numero }}</p>
+      <p><b>Tipo:</b> {{ quartoSelecionado.tipo }}</p>
+      <p><b>Status:</b> {{ quartoSelecionado.status }}</p>
+      <p><b>Hotel:</b> {{ quartoSelecionado.hotel.nome }}</p>
+      <button type="button" class="btn btn-secondary btn-block" (click)="fecharModal()">Fechar</button>
     </div>
-    <button type="button" class="btn btn-secondary btn-block" (click)="fecharModal()">Fechar</button>
   </div>
-</div>
+
+  <!-- Modal para listar todos os quartos -->
+  <div *ngIf="showListAllModal" class="modal-overlay">
+    <div class="modal-content">
+      <h5>Lista de Todos os Quartos</h5>
+      <div *ngFor="let quarto of quartos" class="mb-2">
+        <p>
+          <b>ID:</b> {{ quarto.id }} -
+          <b>Número:</b> {{ quarto.numero }} -
+          <b>Tipo:</b> {{ quarto.tipo }} -
+          <b>Status:</b> {{ quarto.status }} -
+          <b>Hotel:</b> {{ quarto.hotel.nome }}
+        </p>
+      </div>
+      <button type="button" class="btn btn-secondary btn-block" (click)="fecharModal()">Fechar</button>
+    </div>
+  </div>
 
   <footer class="footer">
     © 2024 Reserva Fácil. Todos os direitos reservados.

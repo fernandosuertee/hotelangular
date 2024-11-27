@@ -6,7 +6,9 @@
             <img src="assets/reservafacil.png" alt="Reserva Fácil" class="img-fluid" />
           </a>
         </div>
-  
+        
+        
+
         <div class="form-outline mb-4">
           <input type="number" [(ngModel)]="hotelId" id="hotelIdInput" class="form-control" placeholder=" " required />
           <label class="floating-label" for="hotelIdInput">ID do Hotel</label>
@@ -34,26 +36,27 @@
           <input type="text" [(ngModel)]="editForm.nome" id="nameInput" class="form-control" placeholder=" " required />
           <label class="floating-label" for="nameInput">Nome do Hotel</label>
         </div>
-  
+    
         <div class="form-outline mb-4">
           <input type="text" [(ngModel)]="editForm.endereco" id="addressInput" class="form-control" placeholder=" " required />
           <label class="floating-label" for="addressInput">Endereço</label>
         </div>
-  
+    
         <div class="form-outline mb-4">
           <textarea [(ngModel)]="editForm.descricao" id="descriptionInput" class="form-control" placeholder=" " required></textarea>
           <label class="floating-label" for="descriptionInput">Descrição</label>
         </div>
-  
+    
         <div class="form-outline mb-4">
           <input type="number" [(ngModel)]="editForm.numeroDeQuartos" id="roomCountInput" class="form-control" placeholder=" " required />
           <label class="floating-label" for="roomCountInput">Número de Quartos</label>
         </div>
-  
+    
         <button type="button" class="btn btn-success btn-block" (click)="salvarEdicao()">Salvar Alterações</button>
         <button type="button" class="btn btn-secondary btn-block" (click)="fecharModal()">Fechar</button>
       </div>
     </div>
+    
   
 
     <div *ngIf="showDetailsModal" class="modal-overlay">
