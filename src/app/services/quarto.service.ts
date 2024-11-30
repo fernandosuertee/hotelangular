@@ -16,9 +16,23 @@ export class QuartoService {
       numero: quarto.numero,
       tipo: quarto.tipo,
       status: quarto.status,
+      capacidadeMinima: quarto.capacidadeMinima,
+      capacidadeMaxima: quarto.capacidadeMaxima,
       hotel: { id: quarto.hotel.id },
     };
+  
+    console.log("Payload enviado para a API:", payload);
+  
     return this.http.post<any>(this.API, payload);
+    
+  }
+  
+  updateQuartoStatus(id: number, status: string): Observable<Quarto> {
+    return this.http.patch<Quarto>(`${this.API}/${id}/status`, { status });
+  }  
+
+  getTodosQuartosPorHotel(hotelId: number): Observable<Quarto[]> {
+    return this.http.get<Quarto[]>(`${this.API}/hotel/${hotelId}/todos`);
   }
 
   getAllQuartos(): Observable<Quarto[]> {
@@ -34,10 +48,12 @@ export class QuartoService {
       numero: quarto.numero,
       tipo: quarto.tipo,
       status: quarto.status,
+      capacidadeMinima: quarto.capacidadeMinima,
+      capacidadeMaxima: quarto.capacidadeMaxima,
       hotel: { id: quarto.hotel.id },
     };
     return this.http.put<Quarto>(`${this.API}/${id}`, payload);
-  }
+  }  
 
   deleteQuarto(id: number): Observable<void> {
     return this.http.delete<void>(`${this.API}/${id}`);

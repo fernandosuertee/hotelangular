@@ -1,14 +1,14 @@
 export class Hotel {
-  id: number; // ID obrigatório
-  nome: string;
-  endereco?: string;
-  descricao?: string;
-  numeroDeQuartos?: number;
-  quartosCadastrados?: number; // Adicionado para resolver o problema
+  id?: number; 
+  nome!: string;
+  endereco?: string; 
+  descricao?: string; 
+  numeroDeQuartos?: number
+  quartosCadastrados?: number;
 
   constructor(
     id: number,
-    nome: string = '',
+    nome: string,
     endereco?: string,
     descricao?: string,
     numeroDeQuartos?: number,
@@ -19,6 +19,6 @@ export class Hotel {
     this.endereco = endereco;
     this.descricao = descricao;
     this.numeroDeQuartos = numeroDeQuartos;
-    this.quartosCadastrados = quartosCadastrados; // Inicialização
+    this.quartosCadastrados = quartosCadastrados;
   }
 }

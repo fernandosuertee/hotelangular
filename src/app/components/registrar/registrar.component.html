@@ -8,19 +8,47 @@
       </div>
 
       <div class="form-outline mb-4">
-        <input type="text" [(ngModel)]="nome" id="nameInput" class="form-control" placeholder=" " required />
+        <input
+          type="text"
+          [(ngModel)]="nome"
+          id="nameInput"
+          class="form-control"
+          placeholder=" "
+          required
+        />
         <label class="floating-label" for="nameInput">Nome</label>
       </div>
       <div class="form-outline mb-4">
-        <input type="email" [(ngModel)]="email" id="emailInput" class="form-control" placeholder=" " required />
+        <input
+          type="email"
+          [(ngModel)]="email"
+          id="emailInput"
+          class="form-control"
+          placeholder=" "
+          required
+        />
         <label class="floating-label" for="emailInput">E-mail</label>
       </div>
       <div class="form-outline mb-4">
-        <input type="email" [(ngModel)]="confirmEmail" id="confirmEmailInput" class="form-control" placeholder=" " required />
+        <input
+          type="email"
+          [(ngModel)]="confirmEmail"
+          id="confirmEmailInput"
+          class="form-control"
+          placeholder=" "
+          required
+        />
         <label class="floating-label" for="confirmEmailInput">Confirmar E-mail</label>
       </div>
 
-      <button type="button" class="btn btn-primary btn-block mb-4" (click)="registrar()" [disabled]="isLoading">Cadastrar</button>
+      <button
+        type="button"
+        class="btn btn-primary btn-block mb-4"
+        (click)="cadastrarHospede()"
+        [disabled]="isLoading"
+      >
+        Cadastrar Hóspede
+      </button>
 
       <div *ngIf="isLoading" class="d-flex justify-content-center mb-4">
         <div class="spinner-border text-primary" role="status">

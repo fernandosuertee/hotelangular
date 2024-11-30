@@ -1,8 +1,9 @@
 import { Component } from '@angular/core';
-import { HotelService, Hotel } from '../../services/hotel.service';
+import { HotelService } from '../../services/hotel.service';
 import Swal from 'sweetalert2';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Hotel } from '../../models/hotel';
 
 @Component({
   selector: 'app-gerenciar-hotel',
@@ -65,7 +66,7 @@ export class GerenciarHotelComponent {
     this.hotelService.getHotelById(this.hotelId).subscribe({
       next: (hotel) => {
         this.isLoading = false;
-        this.hotelSelecionado = hotel; // Certifique-se de que `quartosCadastrados` seja carregado aqui
+        this.hotelSelecionado = hotel; 
         this.showDetailsModal = true;
       },
       error: () => {
@@ -92,20 +93,38 @@ export class GerenciarHotelComponent {
     }
 
     this.isLoading = true;
-    this.hotelService.getHotelById(this.hotelId).subscribe({
-      next: (hotel) => {
-        this.isLoading = false;
-        this.editForm = { ...hotel };
-        this.showEditModal = true;
-      },
-      error: () => {
-        this.isLoading = false;
+  this.hotelService.getHotelById(this.hotelId).subscribe({
+    next: (hotel) => {
+      this.isLoading = false;
+
+      // Validar valores retornados para garantir que não sejam indefinidos ou vazios
+      if (!hotel.endereco || !hotel.descricao) {
         Swal.fire({
           title: 'Erro',
-          text: 'Hotel não encontrado para edição.',
+          text: 'Endereço e descrição são obrigatórios e não podem estar vazios.',
           icon: 'error',
-          confirmButtonText: 'Fechar'
+          confirmButtonText: 'Fechar',
         });
+        return;
+      }
+
+      this.editForm = {
+        nome: hotel.nome,
+        endereco: hotel.endereco, 
+        descricao: hotel.descricao, 
+        numeroDeQuartos: hotel.numeroDeQuartos || 0, 
+      };
+
+      this.showEditModal = true;
+    },
+    error: () => {
+      this.isLoading = false;
+      Swal.fire({
+        title: 'Erro',
+        text: 'Hotel não encontrado para edição.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
       }
     });
   }
@@ -166,8 +185,7 @@ export class GerenciarHotelComponent {
     }
   
     return true;
-  }
-  
+  } 
 
   salvarEdicao(): void {
     if (!this.validarEdicao()) {

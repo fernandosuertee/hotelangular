@@ -3,7 +3,8 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { InputComponent } from '../../shared/input/input.component';
-import { HotelService, Hotel } from '../../services/hotel.service';
+import { HotelService } from '../../services/hotel.service';
+import { Hotel } from '../../models/hotel';
 import Swal from 'sweetalert2';
 
 @Component({

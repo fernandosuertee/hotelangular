@@ -1,7 +1,16 @@
-import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { ReservaService } from '../../services/reserva.service';
+import { HospedeService } from '../../services/hospede.service';
+import { HotelService } from '../../services/hotel.service';
+import { QuartoService } from '../../services/quarto.service';
+import { Reserva } from '../../models/reserva.model';
+import { Hospede } from '../../models/hospede.model';
+import { Hotel } from '../../models/hotel';
+import { Quarto } from '../../models/quarto';
+import Swal from 'sweetalert2';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-cadastrar-reserva',
@@ -11,85 +20,184 @@ import { Router } from '@angular/router';
   styleUrls: ['./cadastrar-reserva.component.scss'],
 })
 export class CadastrarReservaComponent implements OnInit {
-  hospedes: any[] = [];
-  hoteis: any[] = [];
-  quartos: any[] = [];
-  hospedeSelecionado!: number;
-  hotelSelecionado!: number;
-  quartoSelecionado!: number;
+  hospedes: Hospede[] = [];
+  hoteis: Hotel[] = [];
+  quartos: Quarto[] = [];
+
+  hospedeSelecionado!: number | null;
+  hotelSelecionado!: number | null;
+  quartoSelecionado!: number | null;
   dataCheckIn!: string;
   dataCheckOut!: string;
   numHospedes!: number;
+
   isLoading: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(
+    private reservaService: ReservaService,
+    private hospedeService: HospedeService,
+    private hotelService: HotelService,
+    private quartoService: QuartoService
+  ) {}
 
   ngOnInit(): void {
     this.carregarHospedes();
     this.carregarHoteis();
   }
 
-  carregarHospedes() {
-    const hospedesSalvos = JSON.parse(localStorage.getItem('clientes') || '[]');
-    this.hospedes = hospedesSalvos.map((cliente: any, index: number) => ({
-      id: index + 1,
-      nome: cliente.nome,
-      email: cliente.email,
-    }));
+  carregarHospedes(): void {
+    this.hospedeService.getAllHospedes().subscribe({
+      next: (hospedes) => {
+        this.hospedes = hospedes;
+      },
+      error: () => {
+        Swal.fire('Erro', 'Não foi possível carregar os hóspedes.', 'error');
+      },
+    });
   }
 
-  carregarHoteis() {
-    const hoteisSalvos = JSON.parse(localStorage.getItem('hoteis') || '[]');
-    this.hoteis = hoteisSalvos.length > 0 ? hoteisSalvos : [{ id: 1, nome: 'Hotel Central' }];
+  carregarHoteis(): void {
+    this.hotelService.getAllHotels().subscribe({
+      next: (hoteis) => {
+        this.hoteis = hoteis;
+      },
+      error: () => {
+        Swal.fire('Erro', 'Não foi possível carregar os hotéis.', 'error');
+      },
+    });
   }
 
-  carregarQuartos() {
-    const quartosSalvos = JSON.parse(localStorage.getItem('quartos') || '[]');
-    this.quartos = quartosSalvos.filter((quarto: any) => quarto.hotelId === this.hotelSelecionado);
+  carregarQuartos(): void {
+    if (this.hotelSelecionado) {
+      this.quartoService.getTodosQuartosPorHotel(this.hotelSelecionado).subscribe({
+        next: (quartos: Quarto[]) => {
+          this.quartos = quartos;
+        },
+        error: () => {
+          Swal.fire('Erro', 'Não foi possível carregar os quartos.', 'error');
+        },
+      });
+    }
   }
 
-  gerarIdReserva(): number {
-    const reservasExistentes = JSON.parse(localStorage.getItem('reservas') || '[]');
-    return reservasExistentes.length > 0
-      ? reservasExistentes[reservasExistentes.length - 1].id + 1
-      : 1;
+  getDataMinima(): string {
+    const hoje = new Date();
+    return hoje.toISOString().split('T')[0];
   }
 
-  cadastrarReserva() {
-    if (
-      !this.hospedeSelecionado ||
-      !this.hotelSelecionado ||
-      !this.quartoSelecionado ||
-      !this.dataCheckIn ||
-      !this.dataCheckOut ||
-      !this.numHospedes
-    ) {
-      alert('Por favor, preencha todos os campos.');
+  cadastrarReserva(): void {
+    if (!this.validarCampos()) {
       return;
     }
 
-    
+    const hospede = this.hospedes.find((h) => h.id === this.hospedeSelecionado);
+    const hotel = this.hoteis.find((h) => h.id === this.hotelSelecionado);
+    const quarto = this.quartos.find((q) => q.id === this.quartoSelecionado);
+
+    if (!hospede || !hotel || !quarto) {
+      Swal.fire('Erro', 'Dados inválidos. Verifique os campos selecionados.', 'error');
+      return;
+    }
+
+    const novaReserva = new Reserva(
+      hospede,
+      hotel,
+      quarto,
+      this.dataCheckIn,
+      this.dataCheckOut,
+      this.numHospedes
+    );
+
+    this.isLoading = true;
+
+    this.reservaService.criarReserva(novaReserva).subscribe({
+      next: () => {
+        this.isLoading = false;
+        Swal.fire('Sucesso', 'Reserva cadastrada com sucesso!', 'success');
+        this.limparCampos();
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error('Erro ao cadastrar reserva:', err); // Loga o erro no console
+        let mensagemErro = 'Não foi possível cadastrar a reserva.';
+        if (err.error) {
+          if (err.error.message) {
+            mensagemErro = err.error.message;
+          } else if (typeof err.error === 'string') {
+            mensagemErro = err.error;
+          } else if (err.error.errors) {
+            mensagemErro = err.error.errors.map((e: any) => e.defaultMessage).join(', ');
+          }
+        }
+        Swal.fire('Erro', mensagemErro, 'error');
+      },
+    });
+  }
+
+  validarCampos(): boolean {
+
+    const hoje = new Date();
+    hoje.setHours(0, 0, 0, 0);
+
+    const dataCheckIn = new Date(this.dataCheckIn);
+    const dataCheckOut = new Date(this.dataCheckOut);
+
+
+    if (!this.hospedeSelecionado) {
+      Swal.fire('Erro', 'Selecione um hóspede.', 'error');
+      return false;
+    }
+    if (!this.hotelSelecionado) {
+      Swal.fire('Erro', 'Selecione um hotel.', 'error');
+      return false;
+    }
+    if (!this.quartoSelecionado) {
+      Swal.fire('Erro', 'Selecione um quarto.', 'error');
+      return false;
+    }
+    if (!this.dataCheckIn || !this.dataCheckOut) {
+      Swal.fire('Erro', 'Selecione as datas de check-in e check-out.', 'error');
+      return false;
+    }
+    if (new Date(this.dataCheckIn) < new Date()) {
+      Swal.fire('Erro', 'Data de check-in não pode ser no passado.', 'error');
+      return false;
+    }
     if (new Date(this.dataCheckOut) <= new Date(this.dataCheckIn)) {
-      alert('A data de check-out deve ser posterior à data de check-in.');
-      return;
+      Swal.fire('Erro', 'Data de check-out deve ser após o check-in.', 'error');
+      return false;
+    }
+    if (!this.numHospedes || this.numHospedes <= 0) {
+      Swal.fire('Erro', 'Número de hóspedes deve ser maior que zero.', 'error');
+      return false;
     }
 
-    const reserva = {
-      id: this.gerarIdReserva(),
-      hospedeId: this.hospedeSelecionado,
-      hotelId: this.hotelSelecionado,
-      quartoId: this.quartoSelecionado,
-      dataCheckIn: this.dataCheckIn,
-      dataCheckOut: this.dataCheckOut,
-      numHospedes: this.numHospedes,
-      status: 'Pendente',
-    };
 
-    const reservasExistentes = JSON.parse(localStorage.getItem('reservas') || '[]');
-    reservasExistentes.push(reserva);
-    localStorage.setItem('reservas', JSON.stringify(reservasExistentes));
+    const quarto = this.quartos.find((q) => q.id === this.quartoSelecionado);
+    if (quarto) {
+      if (
+        this.numHospedes < quarto.capacidadeMinima ||
+        this.numHospedes > quarto.capacidadeMaxima
+      ) {
+        Swal.fire(
+          'Erro',
+          `Número de hóspedes inválido para o tipo de quarto '${quarto.tipo}'. O número permitido é entre ${quarto.capacidadeMinima} e ${quarto.capacidadeMaxima}.`,
+          'error'
+        );
+        return false;
+      }
+    }
 
-    alert('Reserva cadastrada com sucesso!');
-    this.router.navigate(['/home']);
+    return true;
+  }
+
+  limparCampos(): void {
+    this.hospedeSelecionado = 0;
+    this.hotelSelecionado = 0;
+    this.quartoSelecionado = 0;
+    this.dataCheckIn = '';
+    this.dataCheckOut = '';
+    this.numHospedes = 0;
+    this.quartos = [];
   }
 }

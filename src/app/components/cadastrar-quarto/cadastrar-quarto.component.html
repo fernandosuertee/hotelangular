@@ -12,12 +12,12 @@
         [(model)]="numero"
         id="numeroInput"
         label="Número do Quarto"
-        placeholder="Digite o número do quarto"
+        placeholder="Digite o número do quarto (entre 100 e 9999)"
       ></app-input>
     
 
   <div class="form-outline mb-4">
-    <select [(ngModel)]="tipo" id="tipoSelect" class="form-control" required>
+    <select [(ngModel)]="tipo" id="tipoSelect" class="form-control" required (change)="onTipoChange()">
       <option value="" disabled [selected]="!tipo">Selecione o tipo do quarto</option>
       <option value="Quarto Solteiro">Quarto Solteiro (até 1 hóspede)</option>
       <option value="Quarto Casal">Quarto Casal (1 a 2 hóspedes)</option>
@@ -51,8 +51,6 @@
         type="number"
         [(model)]="capacidadeMinima"
         id="capacidadeMinimaInput"
-        [min]="capacidadeMinimaMinima"
-        [max]="capacidadeMinimaMaxima"
         label="Capacidade Mínima"
         placeholder="Digite a capacidade mínima"
         (change)="validarCapacidade()"
@@ -64,14 +62,13 @@
         type="number"
         [(model)]="capacidadeMaxima"
         id="capacidadeMaximaInput"
-        [min]="capacidadeMaximaMinima"
-        [max]="capacidadeMaximaMaxima"
         label="Capacidade Máxima"
         placeholder="Digite a capacidade máxima"
         (change)="validarCapacidade()"
       ></app-input>
     </div>
   </div>
+  
 
       <button
         type="button"

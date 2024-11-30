@@ -32,30 +32,84 @@
   </div>
 
   <!-- Modal para editar quarto -->
-  <div *ngIf="showEditModal" class="modal-overlay">
-    <div class="modal-content">
-      <button class="close-button" (click)="fecharModal()">×</button>
-      <h5>Editar Quarto</h5>
-      <!-- Input para Número do Quarto -->
-      <app-input
-        type="text"
-        [(model)]="editForm.numero"
-        id="numeroInput"
-        label="Número do Quarto"
-        placeholder="Digite o número do quarto"
-      ></app-input>
+<div *ngIf="showEditModal" class="modal-overlay">
+  <div class="modal-content">
+    <button class="close-button" (click)="fecharModal()">×</button>
+    <h5>Editar Quarto</h5>
 
-      <!-- Select para Hotel -->
-      <div class="form-outline mb-4">
-        <select [(ngModel)]="editForm.hotel.id" id="hotelSelect" class="form-control">
-          <option *ngFor="let hotel of hoteis" [value]="hotel.id">{{ hotel.nome }}</option>
-        </select>
-        <label class="floating-label" for="hotelSelect">Selecionar Hotel</label>
-      </div>
+    <!-- Input para Número do Quarto -->
+    <app-input
+      type="text"
+      [(model)]="editForm.numero"
+      id="numeroInput"
+      label="Número do Quarto"
+      placeholder="Digite o número do quarto"
+    ></app-input>
 
-      <button type="button" class="btn btn-success btn-block mb-4" (click)="salvarEdicao()">Salvar</button>
+    <!-- Select para Tipo do Quarto -->
+    <div class="form-outline mb-4">
+      <select [(ngModel)]="editForm.tipo" id="tipoSelect" class="form-control">
+        <option value="" disabled [selected]="!editForm.tipo">Selecione o tipo do quarto</option>
+        <!-- Opções de tipo de quarto -->
+        <option value="Quarto Solteiro">Quarto Solteiro</option>
+        <option value="Quarto Casal">Quarto Casal</option>
+        <option value="Quarto Triplo">Quarto Triplo</option>
+        <option value="Apartamento">Apartamento</option>
+        <option value="Master Deluxe">Master Deluxe Casal</option>
+      </select>
+      <label class="floating-label" for="tipoSelect">Tipo do Quarto</label>
     </div>
+
+    <!-- Select para Status do Quarto -->
+    <div class="form-outline mb-4">
+      <select [(ngModel)]="editForm.status" id="statusSelect" class="form-control">
+        <option value="" disabled [selected]="!editForm.status">Selecione o status</option>
+        <option value="Disponível">Disponível</option>
+        <option value="Manutenção">Manutenção</option>
+      </select>
+      <label class="floating-label" for="statusSelect">Status do Quarto</label>
+    </div>
+
+    <!-- Exibir Capacidade Mínima (somente leitura) -->
+    <div class="form-outline mb-4">
+      <input
+        type="number"
+        [value]="editForm.capacidadeMinima"
+        id="capacidadeMinimaInput"
+        class="form-control"
+        disabled
+      />
+      <label class="floating-label" for="capacidadeMinimaInput">Capacidade Mínima</label>
+    </div>
+
+    <!-- Exibir Capacidade Máxima (somente leitura) -->
+    <div class="form-outline mb-4">
+      <input
+        type="number"
+        [value]="editForm.capacidadeMaxima"
+        id="capacidadeMaximaInput"
+        class="form-control"
+        disabled
+      />
+      <label class="floating-label" for="capacidadeMaximaInput">Capacidade Máxima</label>
+    </div>
+
+    <!-- Exibir Hotel (somente leitura) -->
+    <div class="form-outline mb-4">
+      <input
+        type="text"
+        [value]="editForm.hotel.nome"
+        id="hotelInput"
+        class="form-control"
+        disabled
+      />
+      <label class="floating-label" for="hotelInput">Hotel</label>
+    </div>
+
+    <button type="button" class="btn btn-success btn-block mb-4" (click)="salvarEdicao()">Salvar</button>
   </div>
+</div>
+
 
   <!-- Modal para detalhes -->
   <div *ngIf="showDetailsModal && quartoSelecionado" class="modal-overlay">

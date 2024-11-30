@@ -30,8 +30,8 @@ export class InputComponent {
   @Input() id = '';
   @Input() label = '';
   @Input() placeholder = ' ';
-  @Input() min?: number; // Adicionado para suportar valores mínimos
-  @Input() max?: number; // Adicionado para suportar valores máximos
+  @Input() min?: number; 
+  @Input() max?: number; 
 
   onModelChange(value: any) {
     this.modelChange.emit(value);

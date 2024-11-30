@@ -97,6 +97,35 @@ export class CadastrarQuartoComponent {
       });
       return false;
     }
+    if (this.capacidadeMinima == null || this.capacidadeMaxima == null) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'As capacidades mínima e máxima devem ser informadas.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
+      return false;
+    }
+  
+    if (this.capacidadeMinima <= 0 || this.capacidadeMaxima <= 0) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'As capacidades mínima e máxima devem ser valores positivos.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
+      return false;
+    }
+  
+    if (this.capacidadeMinima > this.capacidadeMaxima) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'A capacidade mínima não pode ser maior que a capacidade máxima.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
+      return false;
+    }
   
     return true;
   }
@@ -169,7 +198,7 @@ export class CadastrarQuartoComponent {
         this.capacidadeMaxima = null;
         break;
     }
-  }
+  }  
 
   validarCapacidade(): void {
     if (
@@ -197,17 +226,23 @@ export class CadastrarQuartoComponent {
     if (!this.validarCampos()) {
       return;
     }
+  
+    const hotelSelecionado = this.hoteis.find(h => h.id === this.hotelSelecionado);
 
     const novoQuarto: Quarto = {
       numero: this.numero!.toString(),
       tipo: this.tipo,
       status: this.status,
+      capacidadeMinima: this.capacidadeMinima!,
+      capacidadeMaxima: this.capacidadeMaxima!,
       hotel: {
         id: Number(this.hotelSelecionado),
-        nome: '',
+        nome: hotelSelecionado?.nome || ''
       },
     };
-
+  
+    console.log("Quarto antes do envio ao serviço:", novoQuarto);
+  
     this.isLoading = true;
 
     this.quartoService.createQuarto(novoQuarto).subscribe({
@@ -219,8 +254,10 @@ export class CadastrarQuartoComponent {
           icon: 'success',
           confirmButtonText: 'Ok',
         });
+        // Resetar os campos
         this.numero = null;
         this.tipo = '';
+        this.status = 'Disponível';
         this.hotelSelecionado = null;
         this.capacidadeMinima = null;
         this.capacidadeMaxima = null;
@@ -231,11 +268,12 @@ export class CadastrarQuartoComponent {
         this.isLoading = false;
         Swal.fire({
           title: 'Erro',
-          text: `Não foi possível cadastrar o quarto: ${err.message}`,
+          text: `Erro ao cadastrar o quarto: ${err.error.message || 'Detalhes não disponíveis.'}`,
           icon: 'error',
           confirmButtonText: 'Fechar',
         });
       },
     });
   }
+  
 }

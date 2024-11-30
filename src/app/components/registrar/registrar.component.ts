@@ -1,20 +1,18 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { HospedeService } from '../../services/hospede.service';
+import { FormsModule } from '@angular/forms'; // Importar o FormsModule
 import { CommonModule } from '@angular/common';
+import { Hospede } from '../../models/hospede.model';
+import Swal from 'sweetalert2';
 
-interface Cliente {
-  id: number;
-  nome: string;
-  email: string;
-}
 
 @Component({
   selector: 'app-registrar',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [CommonModule, FormsModule], 
   templateUrl: './registrar.component.html',
-  styleUrls: ['./registrar.component.scss']
+  styleUrls: ['./registrar.component.scss'],
 })
 export class RegistrarComponent {
   nome: string = '';
@@ -22,49 +20,95 @@ export class RegistrarComponent {
   confirmEmail: string = '';
   isLoading: boolean = false;
 
-  constructor(private router: Router) {}
+  constructor(private hospedeService: HospedeService, private router: Router) {}
 
-  gerarIdCliente(): number {
-    const clientesExistentes = JSON.parse(localStorage.getItem('clientes') || '[]');
-    return clientesExistentes.length > 0
-      ? clientesExistentes[clientesExistentes.length - 1].id + 1
-      : 1;
-  }
-
-  registrar() {
-    if (!this.nome || !this.email || !this.confirmEmail) {
-      alert('Por favor, preencha todos os campos.');
+  cadastrarHospede(): void {
+    if (!this.validarCampos()) {
       return;
     }
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(this.email)) {
-      alert('Por favor, insira um e-mail válido.');
-      return;
-    }
-
-    if (this.email !== this.confirmEmail) {
-      alert('Os e-mails não correspondem.');
-      return;
-    }
+    const novoHospede: Hospede = {
+      nome: this.nome.trim(),
+      email: this.email.trim(),
+    };
 
     this.isLoading = true;
 
-    setTimeout(() => {
-      this.isLoading = false;
+    this.hospedeService.createHospede(novoHospede).subscribe({
+      next: () => {
+        this.isLoading = false;
+        Swal.fire({
+          title: 'Sucesso',
+          text: 'Hóspede cadastrado com sucesso!',
+          icon: 'success',
+          confirmButtonText: 'Ok',
+        });
+        // Limpar os campos
+        this.nome = '';
+        this.email = '';
+        this.confirmEmail = '';
+        this.router.navigate(['/home']);
+      },
+      error: (err) => {
+        this.isLoading = false;
+        let errorMessage = 'Erro desconhecido. Tente novamente mais tarde.';
+        if (err.error && err.error.message) {
+          errorMessage = err.error.message;
+        } else if (err.status === 400) {
+          errorMessage = 'Dados inválidos. Verifique as informações e tente novamente.';
+        }
+        Swal.fire({
+          title: 'Erro',
+          text: errorMessage,
+          icon: 'error',
+          confirmButtonText: 'Fechar',
+        });
+      },
+    });
+  }
 
-      const novoCliente: Cliente = {
-        id: this.gerarIdCliente(),
-        nome: this.nome,
-        email: this.email
-      };
+  validarCampos(): boolean {
+    if (!this.nome.trim()) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'O campo "Nome" não pode estar vazio.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
+      return false;
+    }
 
-      const clientesExistentes = JSON.parse(localStorage.getItem('clientes') || '[]');
-      clientesExistentes.push(novoCliente);
-      localStorage.setItem('clientes', JSON.stringify(clientesExistentes));
+    if (!this.email.trim()) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'O campo "E-mail" não pode estar vazio.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
+      return false;
+    }
 
-      alert('Cadastro realizado com sucesso!');
-      this.router.navigate(['/home']);
-    }, 2000);
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.email.trim())) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'Por favor, insira um e-mail válido.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
+      return false;
+    }
+
+    if (this.email.trim() !== this.confirmEmail.trim()) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'Os e-mails não correspondem.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
+      return false;
+    }
+
+    return true;
   }
 }

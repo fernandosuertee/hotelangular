@@ -5,19 +5,25 @@ export class Quarto {
   numero: string;
   tipo: string;
   status: string;
-  hotel: Hotel; // 'hotel' é obrigatório
+  capacidadeMinima: number;
+  capacidadeMaxima: number;
+  hotel: { id: number; nome: string };
 
   constructor(
     numero: string,
     tipo: string,
     status: string,
-    hotel: Hotel,
+    capacidadeMinima: number,
+    capacidadeMaxima: number,
+    hotel: { id: number; nome: string},
     id?: number
   ) {
     this.id = id;
     this.numero = numero;
     this.tipo = tipo;
     this.status = status;
+    this.capacidadeMinima = capacidadeMinima;
+    this.capacidadeMaxima = capacidadeMaxima;
     this.hotel = hotel;
   }
 }

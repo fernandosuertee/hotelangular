@@ -1,26 +1,23 @@
 import { Component } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { HospedeService } from '../../services/hospede.service';
+import { Hospede } from '../../models/hospede.model';
+import Swal from 'sweetalert2';
+import { FormsModule } from '@angular/forms'; // Importar o FormsModule
 import { CommonModule } from '@angular/common';
 
-interface Cliente {
-  id: number;
-  nome: string;
-  email: string;
-}
 
 @Component({
   selector: 'app-gerenciar-cliente',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [CommonModule, FormsModule],
   templateUrl: './gerenciar-cliente.component.html',
-  styleUrls: ['./gerenciar-cliente.component.scss']
+  styleUrls: ['./gerenciar-cliente.component.scss'],
 })
 export class GerenciarClienteComponent {
-  clienteId: number | null = null;
+  hospedeId: number | null = null;
   isLoading: boolean = false;
-  clientes: Cliente[] = [];
-  clienteSelecionado: Cliente | null = null;
+  hospedes: Hospede[] = [];
+  hospedeSelecionado: Hospede | null = null;
 
   showEditModal = false;
   showDetailsModal = false;
@@ -28,84 +25,201 @@ export class GerenciarClienteComponent {
 
   editForm = {
     nome: '',
-    email: ''
+    email: '',
   };
 
-  constructor(private router: Router, private route: ActivatedRoute) {
-    this.carregarClientes();
+  constructor(private hospedeService: HospedeService) {
+    this.carregarHospedes();
   }
 
-  carregarClientes(): void {
-    const clientesArmazenados = JSON.parse(localStorage.getItem('clientes') || '[]');
-    this.clientes = clientesArmazenados.map((cliente: any, index: number) => ({
-      id: index + 1,
-      nome: cliente.nome,
-      email: cliente.email,
-    }));
+  carregarHospedes(): void {
+    this.hospedeService.getAllHospedes().subscribe({
+      next: (hospedes) => {
+        this.hospedes = hospedes;
+      },
+      error: () => {
+        Swal.fire({
+          title: 'Erro',
+          text: 'Não foi possível carregar os hóspedes.',
+          icon: 'error',
+          confirmButtonText: 'Fechar',
+        });
+      },
+    });
   }
 
   verDetalhes(): void {
-    if (this.clienteId === null || this.clienteId < 0) {
-      alert('Por favor, insira um ID de cliente válido.');
+    if (!this.hospedeId) {
+      Swal.fire('Erro', 'Por favor, insira um ID de hóspede válido.', 'error');
       return;
     }
 
     this.isLoading = true;
-    setTimeout(() => {
-      this.clienteSelecionado = this.clientes.find(cliente => cliente.id === this.clienteId) || null;
-      if (this.clienteSelecionado) {
+    this.hospedeService.getHospedeById(this.hospedeId).subscribe({
+      next: (hospede) => {
+        this.isLoading = false;
+        this.hospedeSelecionado = hospede;
         this.showDetailsModal = true;
-      } else {
-        alert('Cliente não encontrado.');
-      }
-      this.isLoading = false;
-    }, 1000);
+      },
+      error: () => {
+        this.isLoading = false;
+        Swal.fire('Erro', 'Hóspede não encontrado.', 'error');
+      },
+    });
   }
 
-  editarCliente(): void {
-    if (this.clienteId === null || this.clienteId < 0) {
-      alert('Por favor, insira um ID de cliente válido.');
+  editarHospede(): void {
+    if (!this.hospedeId) {
+      Swal.fire('Erro', 'Por favor, insira um ID de hóspede válido.', 'error');
       return;
     }
 
     this.isLoading = true;
-    setTimeout(() => {
-      const cliente = this.clientes.find(cliente => cliente.id === this.clienteId);
-      if (cliente) {
+    this.hospedeService.getHospedeById(this.hospedeId).subscribe({
+      next: (hospede) => {
+        this.isLoading = false;
         this.editForm = {
-          nome: cliente.nome,
-          email: cliente.email
+          nome: hospede.nome,
+          email: hospede.email,
         };
+        this.hospedeSelecionado = hospede;
         this.showEditModal = true;
-        this.clienteSelecionado = cliente;
-      } else {
-        alert('Cliente não encontrado para edição.');
-      }
-      this.isLoading = false;
-    }, 1000);
+      },
+      error: () => {
+        this.isLoading = false;
+        Swal.fire('Erro', 'Hóspede não encontrado para edição.', 'error');
+      },
+    });
   }
 
-  excluirCliente(): void {
-    if (this.clienteId === null || this.clienteId < 0) {
-      alert('Por favor, insira um ID de cliente válido.');
+  validarEdicao(): boolean {
+    if (!this.editForm.nome.trim()) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'O campo "Nome" não pode estar vazio.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
+      return false;
+    }
+
+    if (!this.editForm.email.trim()) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'O campo "E-mail" não pode estar vazio.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
+      return false;
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(this.editForm.email.trim())) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'Por favor, insira um e-mail válido.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
+      return false;
+    }
+
+    // Verificar se o e-mail já está em uso por outro hóspede
+    const emailJaCadastrado = this.hospedes.find(
+      (hospede) =>
+        hospede.email === this.editForm.email.trim() &&
+        hospede.id !== this.hospedeSelecionado?.id
+    );
+
+    if (emailJaCadastrado) {
+      Swal.fire({
+        title: 'Erro',
+        text: 'Este e-mail já está cadastrado para outro hóspede.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
+      return false;
+    }
+
+    return true;
+  }
+
+  salvarEdicao(): void {
+    if (!this.validarEdicao()) {
       return;
     }
 
-    if (confirm(`Tem certeza de que deseja excluir o cliente com ID: ${this.clienteId}?`)) {
-      const index = this.clientes.findIndex(cliente => cliente.id === this.clienteId);
-      if (index !== -1) {
-        this.clientes.splice(index, 1);
-        localStorage.setItem('clientes', JSON.stringify(this.clientes));
-        alert(`Cliente com ID ${this.clienteId} foi excluído.`);
-        this.clienteSelecionado = null;
-        this.clienteId = null;
-      } else {
-        alert('Cliente não encontrado para exclusão.');
-      }
-    }
+    const hospedeAtualizado: Hospede = {
+      id: this.hospedeSelecionado?.id,
+      nome: this.editForm.nome.trim(),
+      email: this.editForm.email.trim(),
+    };
+
+    this.isLoading = true;
+    this.hospedeService.updateHospede(hospedeAtualizado.id!, hospedeAtualizado).subscribe({
+      next: () => {
+        this.isLoading = false;
+        Swal.fire({
+          title: 'Sucesso',
+          text: 'Hóspede atualizado com sucesso!',
+          icon: 'success',
+          confirmButtonText: 'Ok',
+        });
+        this.fecharModal();
+        this.carregarHospedes();
+      },
+      error: (err) => {
+        this.isLoading = false;
+        let errorMessage = 'Não foi possível atualizar o hóspede.';
+        if (err.error && err.error.message) {
+          errorMessage = err.error.message;
+        }
+        Swal.fire({
+          title: 'Erro',
+          text: errorMessage,
+          icon: 'error',
+          confirmButtonText: 'Fechar',
+        });
+      },
+    });
   }
 
-  listarClientes(): void {
+  excluirHospede(): void {
+    if (!this.hospedeId) {
+      Swal.fire('Erro', 'Por favor, insira um ID de hóspede válido.', 'error');
+      return;
+    }
+
+    Swal.fire({
+      title: 'Confirmar exclusão',
+      text: 'Tem certeza que deseja excluir este hóspede?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Sim',
+      cancelButtonText: 'Cancelar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.isLoading = true;
+        this.hospedeService.deleteHospede(this.hospedeId!).subscribe({
+          next: () => {
+            this.isLoading = false;
+            Swal.fire('Sucesso', 'Hóspede excluído com sucesso.', 'success');
+            this.carregarHospedes();
+          },
+          error: (err) => {
+            this.isLoading = false;
+            let errorMessage = 'Não foi possível excluir o hóspede.';
+            if (err.error && err.error.message) {
+              errorMessage = err.error.message;
+            }
+            Swal.fire('Erro', errorMessage, 'error');
+          },
+        });
+      }
+    });
+  }
+
+  listarHospedes(): void {
     this.showListAllModal = true;
   }
 
@@ -113,16 +227,6 @@ export class GerenciarClienteComponent {
     this.showEditModal = false;
     this.showDetailsModal = false;
     this.showListAllModal = false;
-    this.clienteSelecionado = null;
-  }
-
-  salvarEdicao(): void {
-    if (this.clienteSelecionado) {
-      this.clienteSelecionado.nome = this.editForm.nome;
-      this.clienteSelecionado.email = this.editForm.email;
-      localStorage.setItem('clientes', JSON.stringify(this.clientes));
-      alert(`Cliente com ID ${this.clienteSelecionado.id} atualizado com sucesso.`);
-      this.fecharModal();
-    }
+    this.hospedeSelecionado = null;
   }
 }

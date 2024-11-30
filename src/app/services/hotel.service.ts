@@ -1,15 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
-export interface Hotel {
-  id?: number;
-  nome: string;
-  endereco: string;
-  descricao: string;
-  numeroDeQuartos: number;
-  quartosCadastrados?: number; // Adicione esta linha
-}
+import { Hotel } from '../models/hotel';
 
 
 @Injectable({

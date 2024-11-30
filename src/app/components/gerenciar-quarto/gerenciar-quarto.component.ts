@@ -29,8 +29,11 @@ export class GerenciarQuartoComponent {
     numero: '',
     tipo: '',
     status: '',
+    capacidadeMinima: 0,
+    capacidadeMaxima: 0,
     hotel: { id: 0, nome: '' },
   };
+  
 
   constructor(private quartoService: QuartoService, private hotelService: HotelService) {
     this.carregarHoteis();
@@ -69,8 +72,8 @@ export class GerenciarQuartoComponent {
     this.quartoService.getQuartoById(this.quartoId).subscribe({
       next: (quarto) => {
         this.isLoading = false;
-        this.quartoSelecionado = quarto; // Armazena os dados do quarto selecionado
-        this.showDetailsModal = true; // Exibe o modal de detalhes
+        this.quartoSelecionado = quarto; 
+        this.showDetailsModal = true; 
       },
       error: () => {
         this.isLoading = false;
@@ -98,11 +101,13 @@ export class GerenciarQuartoComponent {
           numero: quarto.numero,
           tipo: quarto.tipo,
           status: quarto.status,
+          capacidadeMinima: quarto.capacidadeMinima,
+          capacidadeMaxima: quarto.capacidadeMaxima,
           hotel: {
             id: quarto.hotel.id!,
             nome: quarto.hotel.nome,
           },
-        };
+        };        
         this.showEditModal = true;
       },
       error: () => {
@@ -117,6 +122,16 @@ export class GerenciarQuartoComponent {
       Swal.fire({
         title: 'Erro',
         text: 'Todos os campos obrigatórios devem ser preenchidos.',
+        icon: 'error',
+        confirmButtonText: 'Fechar',
+      });
+      return false;
+    }
+
+    if (this.editForm.status.toLowerCase() === 'ocupado') {
+      Swal.fire({
+        title: 'Erro',
+        text: 'Não é possível alterar o status para "Ocupado" manualmente.',
         icon: 'error',
         confirmButtonText: 'Fechar',
       });
@@ -141,6 +156,7 @@ export class GerenciarQuartoComponent {
         quarto.id !== this.quartoId
     );
 
+
     if (quartoDuplicado) {
       Swal.fire({
         title: 'Erro',
@@ -164,11 +180,14 @@ export class GerenciarQuartoComponent {
       numero: this.editForm.numero,
       tipo: this.editForm.tipo,
       status: this.editForm.status,
+      capacidadeMinima: this.editForm.capacidadeMinima,
+      capacidadeMaxima: this.editForm.capacidadeMaxima,
       hotel: {
         id: this.editForm.hotel.id!,
         nome: this.editForm.hotel.nome,
-      },
+      },    
     };
+    
 
     this.isLoading = true;
     this.quartoService.updateQuarto(this.quartoId!, quartoAtualizado).subscribe({
@@ -225,8 +244,6 @@ export class GerenciarQuartoComponent {
       }
     });
   }
-
-  
 
   fecharModal(): void {
     this.showEditModal = false;

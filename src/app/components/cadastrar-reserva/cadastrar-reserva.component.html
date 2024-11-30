@@ -7,41 +7,91 @@
         </a>
       </div>
 
-
+      <!-- Selecionar Hóspede -->
       <div class="form-outline mb-4">
         <label for="hospedeSelect" class="floating-label">Selecionar Hóspede</label>
-        <select [(ngModel)]="hospedeSelecionado" id="hospedeSelect" class="form-control" required>
-          <option *ngFor="let hospede of hospedes" [value]="hospede.id">{{ hospede.nome }}</option>
+        <select
+          [(ngModel)]="hospedeSelecionado"
+          id="hospedeSelect"
+          class="form-control"
+          required
+        >
+          <option value="" disabled selected>Selecione um hóspede</option>
+          <option *ngFor="let hospede of hospedes" [ngValue]="hospede.id">
+            {{ hospede.nome }}
+          </option>
         </select>
       </div>
 
+      <!-- Número de Hóspedes -->
+      <div class="form-outline mb-4">
+        <input
+          type="number"
+          [(ngModel)]="numHospedes"
+          id="numHospedesInput"
+          class="form-control"
+          placeholder=" "
+          required
+        />
+        <label class="floating-label" for="numHospedesInput">Número de Hóspedes</label>
+      </div>
+
+      <!-- Selecionar Hotel -->
       <div class="form-outline mb-4">
         <label for="hotelSelect" class="floating-label">Selecionar Hotel</label>
-        <select [(ngModel)]="hotelSelecionado" id="hotelSelect" class="form-control" required (change)="carregarQuartos()">
-          <option *ngFor="let hotel of hoteis" [value]="hotel.id">{{ hotel.nome }}</option>
+        <select
+          [(ngModel)]="hotelSelecionado"
+          id="hotelSelect"
+          class="form-control"
+          required
+          (change)="carregarQuartos()"
+        >
+          <option *ngFor="let hotel of hoteis" [ngValue]="hotel.id">
+            {{ hotel.nome }}
+          </option>
         </select>
       </div>
 
+      <!-- Selecionar Quarto -->
       <div class="form-outline mb-4">
         <label for="quartoSelect" class="floating-label">Selecionar Quarto</label>
-        <select [(ngModel)]="quartoSelecionado" id="quartoSelect" class="form-control" required>
-          <option *ngFor="let quarto of quartos" [value]="quarto.id">{{ quarto.numero }} - {{ quarto.tipo }}</option>
+        <select
+          [(ngModel)]="quartoSelecionado"
+          id="quartoSelect"
+          class="form-control"
+          required
+        >
+          
+          <option *ngFor="let quarto of quartos" [ngValue]="quarto.id">
+            {{ quarto.numero }} - {{ quarto.tipo }}
+          </option>
         </select>
       </div>
 
+      <!-- Data de Check-In -->
       <div class="form-outline mb-4">
-        <input type="date" [(ngModel)]="dataCheckIn" id="checkInInput" class="form-control" required />
+        <input
+          type="date"
+          [(ngModel)]="dataCheckIn"
+          id="checkInInput"
+          class="form-control"
+          [min]="getDataMinima()"
+          required
+        />
         <label class="floating-label" for="checkInInput">Data de Check-In</label>
       </div>
 
+      <!-- Data de Check-Out -->
       <div class="form-outline mb-4">
-        <input type="date" [(ngModel)]="dataCheckOut" id="checkOutInput" class="form-control" required />
+        <input
+          type="date"
+          [(ngModel)]="dataCheckOut"
+          id="checkOutInput"
+          class="form-control"
+          [min]="dataCheckIn"
+          required
+        />
         <label class="floating-label" for="checkOutInput">Data de Check-Out</label>
-      </div>
-
-      <div class="form-outline mb-4">
-        <input type="number" [(ngModel)]="numHospedes" id="numHospedesInput" class="form-control" placeholder=" " required />
-        <label class="floating-label" for="numHospedesInput">Número de Hóspedes</label>
       </div>
 
 
@@ -51,7 +101,12 @@
         </div>
       </div>
 
-      <button type="button" class="btn btn-primary btn-block mb-4" (click)="cadastrarReserva()" [disabled]="isLoading">
+      <button
+        type="button"
+        class="btn btn-primary btn-block mb-4"
+        (click)="cadastrarReserva()"
+        [disabled]="isLoading"
+      >
         Cadastrar Reserva
       </button>
     </div>
