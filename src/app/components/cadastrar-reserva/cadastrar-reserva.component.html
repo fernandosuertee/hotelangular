@@ -9,17 +9,17 @@
 
       <!-- Selecionar Hóspede -->
       <div class="form-outline mb-4">
-        <label for="hospedeSelect" class="floating-label">Selecionar Hóspede</label>
         <select
           [(ngModel)]="hospedeSelecionado"
           id="hospedeSelect"
           class="form-control"
           required
         >
-          <option value="" disabled selected>Selecione um hóspede</option>
+          <option value="" disabled>Selecione um hóspede</option>
           <option *ngFor="let hospede of hospedes" [ngValue]="hospede.id">
             {{ hospede.nome }}
           </option>
+          <label class="floating-label" for="hospedeSelect">Selecionar Hóspede</label>
         </select>
       </div>
 
@@ -38,7 +38,6 @@
 
       <!-- Selecionar Hotel -->
       <div class="form-outline mb-4">
-        <label for="hotelSelect" class="floating-label">Selecionar Hotel</label>
         <select
           [(ngModel)]="hotelSelecionado"
           id="hotelSelect"
@@ -50,22 +49,22 @@
             {{ hotel.nome }}
           </option>
         </select>
+        <label class="floating-label" for="hotelSelect">Selecionar Hotel</label>
       </div>
 
       <!-- Selecionar Quarto -->
       <div class="form-outline mb-4">
-        <label for="quartoSelect" class="floating-label">Selecionar Quarto</label>
         <select
           [(ngModel)]="quartoSelecionado"
           id="quartoSelect"
           class="form-control"
           required
         >
-          
           <option *ngFor="let quarto of quartos" [ngValue]="quarto.id">
             {{ quarto.numero }} - {{ quarto.tipo }}
           </option>
         </select>
+        <label class="floating-label" for="quartoSelect">Selecionar Quarto</label>
       </div>
 
       <!-- Data de Check-In -->
