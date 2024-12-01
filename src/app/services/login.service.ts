@@ -9,10 +9,12 @@ import { Usuario } from '../models/usuario';
   providedIn: 'root'
 })
 export class LoginService {
+  static hasPermission(arg0: string) {
+    throw new Error('Method not implemented.');
+  }
 
   http = inject(HttpClient);
   API = "http://localhost:8080/api/login";
-
 
   constructor() { }
 

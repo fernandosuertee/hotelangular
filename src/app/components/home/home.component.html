@@ -17,6 +17,8 @@
         <p class="lead">Gerencie facilmente quartos, reservas e clientes do hotel.</p>
     </div>
     <div class="row">
+
+      @if(loginService.hasPermission("USER") || (loginService.hasPermission("USER"))){
         <div class="col-md-3">
             <div class="card mb-4 shadow-sm" style="background-color: #f9ebea;">
                 <img src="assets/cadusuario.jpeg" class="card-img-top" alt="Cadastrar Pessoa">
@@ -27,8 +29,9 @@
                 </div>
             </div>
         </div>
-    
-        <div class="col-md-3" *ngIf="isAdmin">
+      }
+      @if(loginService.hasPermission("ADMIN")){
+        <div class="col-md-3" >
             <div class="card mb-4 shadow-sm" style="background-color: #e8f8f5;">
                 <img src="assets/cadhotel.jpeg" class="card-img-top" alt="Cadastrar Hotel">
                 <div class="card-body">
@@ -38,8 +41,10 @@
                 </div>
             </div>
         </div>
-    
-        <div class="col-md-3" *ngIf="isAdmin">
+      }
+        
+      @if(loginService.hasPermission("ADMIN")){
+        <div class="col-md-3" >
             <div class="card mb-4 shadow-sm" style="background-color: #fcf3cf;">
                 <img src="assets/cadquarto.jpeg" class="card-img-top" alt="Cadastrar Quarto">
                 <div class="card-body">
@@ -49,7 +54,9 @@
                 </div>
             </div>
         </div>
-    
+      }
+
+      @if(loginService.hasPermission("USER") || (loginService.hasPermission("USER"))){
         <div class="col-md-3">
             <div class="card mb-4 shadow-sm" style="background-color: #f4ecf7;">
                 <img src="assets/cadreserva.jpeg" class="card-img-top" alt="Cadastrar Reserva">
@@ -60,54 +67,60 @@
                 </div>
             </div>
         </div>
+      }
 
-      <div class="col-md-3">
-        <div class="card mb-4 shadow-sm" style="background-color: #e6e6fa;">
-          <img src="assets/gerenciarClientes.jpeg" class="card-img-top" alt="Gerenciar Clientes">
-          <div class="card-body">
-            <h5 class="card-title">Gerenciar Hospedes</h5>
-            <p class="card-text">Visualize e edite dados dos clientes.</p>
-            <button class="btn btn-block" style="background-color: #d8bfd8; color: #333;" (click)="navigateTo('gerenciar-cliente')">Acessar</button>
+      @if(loginService.hasPermission("USER") || (loginService.hasPermission("USER"))){
+        <div class="col-md-3">
+          <div class="card mb-4 shadow-sm" style="background-color: #e6e6fa;">
+            <img src="assets/gerenciarClientes.jpeg" class="card-img-top" alt="Gerenciar Clientes">
+            <div class="card-body">
+              <h5 class="card-title">Gerenciar Hospedes</h5>
+              <p class="card-text">Visualize e edite dados dos clientes.</p>
+              <button class="btn btn-block" style="background-color: #d8bfd8; color: #333;" (click)="navigateTo('gerenciar-cliente')">Acessar</button>
+            </div>
           </div>
         </div>
-      </div>
+      }
 
-     
-      <div class="col-md-3" *ngIf="isAdmin">
-        <div class="card mb-4 shadow-sm" style="background-color: #e8f8f5;">
-          <img src="assets/gerenciar-hotel.jpeg" class="card-img-top" alt="Gerenciar Hotel">
-          <div class="card-body">
-            <h5 class="card-title">Gerenciar Hotel</h5>
-            <p class="card-text">Gerencie as informações do hotel.</p>
-            <button class="btn btn-block" style="background-color: #d1f2eb; color: #333;" (click)="navigateTo('gerenciar-hotel')">Acessar</button>
+      @if(loginService.hasPermission("ADMIN")){
+        <div class="col-md-3" >
+          <div class="card mb-4 shadow-sm" style="background-color: #e8f8f5;">
+            <img src="assets/gerenciar-hotel.jpeg" class="card-img-top" alt="Gerenciar Hotel">
+            <div class="card-body">
+              <h5 class="card-title">Gerenciar Hotel</h5>
+              <p class="card-text">Gerencie as informações do hotel.</p>
+              <button class="btn btn-block" style="background-color: #d1f2eb; color: #333;" (click)="navigateTo('gerenciar-hotel')">Acessar</button>
+            </div>
           </div>
         </div>
-      </div>
+      }
 
-      
-      <div class="col-md-3" *ngIf="isAdmin">
-        <div class="card mb-4 shadow-sm" style="background-color: #fcf3cf;">
-          <img src="assets/gerenciar-quarto.jpeg" class="card-img-top" alt="Gerenciar Quarto">
-          <div class="card-body">
-            <h5 class="card-title">Gerenciar Quarto</h5>
-            <p class="card-text">Gerencie os quartos do hotel.</p>
-            <button class="btn btn-block" style="background-color: #fef9e7; color: #333;" (click)="navigateTo('gerenciar-quarto')">Acessar</button>
+      @if(loginService.hasPermission("ADMIN")){
+        <div class="col-md-3" >
+          <div class="card mb-4 shadow-sm" style="background-color: #fcf3cf;">
+            <img src="assets/gerenciar-quarto.jpeg" class="card-img-top" alt="Gerenciar Quarto">
+            <div class="card-body">
+              <h5 class="card-title">Gerenciar Quarto</h5>
+              <p class="card-text">Gerencie os quartos do hotel.</p>
+              <button class="btn btn-block" style="background-color: #fef9e7; color: #333;" (click)="navigateTo('gerenciar-quarto')">Acessar</button>
+            </div>
           </div>
         </div>
-      </div>
+      }
 
-      
-      <div class="col-md-3">
-        <div class="card mb-4 shadow-sm" style="background-color: #f4ecf7;">
-          <img src="assets/gerenciar-reserva.jpeg" class="card-img-top" alt="Gerenciar Reserva">
-          <div class="card-body">
-            <h5 class="card-title">Gerenciar Reserva</h5>
-            <p class="card-text">Gerencie as reservas dos clientes.</p>
-            <button class="btn btn-block" style="background-color: #fadbd8; color: #333;" (click)="navigateTo('gerenciar-reserva')">Acessar</button>
+      @if(loginService.hasPermission("USER") || (loginService.hasPermission("USER"))) {
+        <div class="col-md-3">
+          <div class="card mb-4 shadow-sm" style="background-color: #f4ecf7;">
+            <img src="assets/gerenciar-reserva.jpeg" class="card-img-top" alt="Gerenciar Reserva">
+              <div class="card-body">
+                <h5 class="card-title">Gerenciar Reserva</h5>
+                <p class="card-text">Gerencie as reservas dos clientes.</p>
+                <button class="btn btn-block" style="background-color: #fadbd8; color: #333;" (click)="navigateTo('gerenciar-reserva')">Acessar</button>
+              </div>
+            </div>
           </div>
-        </div>
+      }
       </div>
-    </div>
     </div>
 </div>
 

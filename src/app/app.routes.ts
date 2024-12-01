@@ -9,7 +9,8 @@ import { GerenciarClienteComponent } from './components/gerenciar-cliente/gerenc
 import { GerenciarQuartoComponent } from './components/gerenciar-quarto/gerenciar-quarto.component';
 import { GerenciarHotelComponent } from './components/gerenciar-hotel/gerenciar-hotel.component';
 import { GerenciarReservaComponent } from './components/gerenciar-reserva/gerenciar-reserva.component';
-import { AdminGuard } from './guards/admin.guard';
+
+
 
 export const appRoutes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -17,11 +18,11 @@ export const appRoutes: Routes = [
     { path: 'registrar', component: RegistrarComponent },
     { path: 'home', component: HomeComponent },
     { path: 'cadastrar-reserva', component: CadastrarReservaComponent },
-    { path: 'cadastrar-hotel', component: CadastrarHotelComponent, canActivate: [AdminGuard] },
-    { path: 'cadastrar-quarto', component: CadastrarQuartoComponent, canActivate: [AdminGuard] },
+    { path: 'cadastrar-hotel', component: CadastrarHotelComponent },
+    { path: 'cadastrar-quarto', component: CadastrarQuartoComponent },
     { path: 'gerenciar-cliente', component: GerenciarClienteComponent },
-    { path: 'gerenciar-quarto', component: GerenciarQuartoComponent, canActivate: [AdminGuard] },
-    { path: 'gerenciar-hotel', component: GerenciarHotelComponent, canActivate: [AdminGuard] },
+    { path: 'gerenciar-quarto', component: GerenciarQuartoComponent },
+    { path: 'gerenciar-hotel', component: GerenciarHotelComponent },
     { path: 'gerenciar-reserva', component: GerenciarReservaComponent },
   { path: '**', redirectTo: 'login', pathMatch: 'full' },
 ];
