@@ -8,21 +8,16 @@
       </div>
       
       <div class="form-outline mb-4">
-        <input type="text" id="loginEmail" [(ngModel)]="login" class="form-control" placeholder=" " required />
+        <input type="text" id="loginEmail" [(ngModel)]="login.username" class="form-control" placeholder=" " required />
         <label class="floating-label" for="loginEmail">E-mail</label>
       </div>
       <div class="form-outline mb-4">
-        <input type="password" id="loginPassword" [(ngModel)]="senha" class="form-control" placeholder=" " required />
+        <input type="password" id="loginPassword" [(ngModel)]="login.password" class="form-control" placeholder=" " required />
         <label class="floating-label" for="loginPassword">Senha</label>
       </div>      
-      <div class="form-check mb-4">
-        <input type="checkbox" class="form-check-input" id="adminLogin" [(ngModel)]="isAdminLogin" />
-        <label class="form-check-label" for="adminLogin">Entrar como administrador</label>
-      </div>
 
-      <button type="button" class="btn btn-primary btn-block mb-4" (click)="logar()" [disabled]="isLoading">Entrar</button>
+      <button type="button" class="btn btn-primary btn-block mb-4" (click)="logar()" >Entrar</button>
 
-     
       <div *ngIf="isLoading" class="d-flex justify-content-center mb-4">
         <div class="spinner-border text-primary" role="status">
           <span class="visually-hidden">Carregando...</span>

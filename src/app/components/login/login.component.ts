@@ -1,8 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service'; 
+import { Login } from '../../models/login';
+import { LoginService } from '../../services/login.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -12,44 +14,47 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./login.component.scss'],
 })
 export class LoginComponent {
-  login: string = '';
-  senha: string = '';
-  isAdminLogin: boolean = false;
-  isLoading: boolean = false;
+  login: Login = new Login();
+  isLoading: boolean = false; 
+  loginService = inject(LoginService);
 
-  constructor(private router: Router, private authService: AuthService) {}
+  router = inject(Router); //equivalente ao @Autowired.... traz uma instância única do roteador para o componente
 
-  navigateTo(path: string) {
-    this.router.navigate([`/${path}`]);
+
+  constructor(){
+    this.loginService.removerToken();
   }
 
   logar() {
-    if (!this.login || !this.senha) {
-      alert('Por favor, preencha todos os campos.');
-      return;
-    }
 
-    const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    if (!emailRegex.test(this.login)) {
-      alert('Por favor, insira um e-mail válido.');
-      return;
-    }
-
-    this.isLoading = true;
-
-    setTimeout(() => {
-      this.isLoading = false; 
-      if (this.isAdminLogin && this.login === 'admin@gmail.com' && this.senha === 'admin') {
-        alert('Login de administrador bem-sucedido!');
-        this.authService.setUserRole('admin');
-        this.router.navigate(['home']);
-      } else if (!this.isAdminLogin && this.login === 'usuario@gmail.com' && this.senha === 'usuario') {
-        alert('Login de atendente bem-sucedido!');
-        this.authService.setUserRole('user');
-        this.router.navigate(['home']);
-      } else {
-        alert('Usuário ou senha incorretos.');
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
       }
-    }, 2000); 
+    });
+   
+
+
+    this.loginService.logar(this.login).subscribe({
+      next: token => {
+        this.loginService.addToken(token);
+        this.router.navigate(['home']);
+      },
+      error: erro => {
+        Toast.fire({
+          icon: "error",
+          title: "Usuário ou senha incorretos!"
+        });
+      }
+    })
+
+   
+    
   }
 }
