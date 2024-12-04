@@ -1,16 +1,19 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Hotel } from '../models/hotel';
+import { environment } from '../../environments/environment';
 
 
 @Injectable({
   providedIn: 'root'
 })
 export class HotelService {
-  private readonly API = 'http://localhost:8080/hoteis';
 
-  constructor(private http: HttpClient) {}
+  http = inject(HttpClient);
+  API = environment.SERVIDOR + "/hoteis";
+
+  constructor() {}
 
   createHotel(hotel: Hotel): Observable<Hotel> {
     return this.http.post<Hotel>(this.API, hotel);

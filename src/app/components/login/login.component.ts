@@ -3,8 +3,8 @@ import { FormsModule } from '@angular/forms';
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { Login } from '../../models/login';
-import { LoginService } from '../../services/login.service';
 import Swal from 'sweetalert2';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-login',
@@ -18,8 +18,7 @@ export class LoginComponent {
   isLoading: boolean = false; 
   loginService = inject(LoginService);
 
-  router = inject(Router); //equivalente ao @Autowired.... traz uma instância única do roteador para o componente
-
+  router = inject(Router);
 
   constructor(){
     this.loginService.removerToken();
@@ -47,6 +46,7 @@ export class LoginComponent {
         this.router.navigate(['home']);
       },
       error: erro => {
+        console.error('Erro ao logar:', erro);
         Toast.fire({
           icon: "error",
           title: "Usuário ou senha incorretos!"

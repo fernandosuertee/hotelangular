@@ -1,15 +1,18 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Quarto } from '../models/quarto';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class QuartoService {
-  private readonly API = 'http://localhost:8080/quartos';
+  
+  http = inject(HttpClient);
+  API = environment.SERVIDOR + "/quartos";
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
   createQuarto(quarto: Quarto): Observable<any> {
     const payload = {

@@ -4,17 +4,17 @@ import { Observable } from 'rxjs';
 import { jwtDecode, JwtPayload } from "jwt-decode";
 import { Login } from '../models/login';
 import { Usuario } from '../models/usuario';
+import { environment } from '../../environments/environment';
+
 
 @Injectable({
   providedIn: 'root'
 })
 export class LoginService {
-  static hasPermission(arg0: string) {
-    throw new Error('Method not implemented.');
-  }
+  
 
   http = inject(HttpClient);
-  API = "http://localhost:8080/api/login";
+  API = environment.SERVIDOR + "/login";
 
   constructor() { }
 

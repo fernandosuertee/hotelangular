@@ -18,7 +18,7 @@
     </div>
     <div class="row">
 
-      @if(loginService.hasPermission("USER") || (loginService.hasPermission("USER"))){
+      @if(loginService.hasPermission("USER") || (loginService.hasPermission("ADMIN"))) {
         <div class="col-md-3">
             <div class="card mb-4 shadow-sm" style="background-color: #f9ebea;">
                 <img src="assets/cadusuario.jpeg" class="card-img-top" alt="Cadastrar Pessoa">
@@ -56,7 +56,7 @@
         </div>
       }
 
-      @if(loginService.hasPermission("USER") || (loginService.hasPermission("USER"))){
+      @if(loginService.hasPermission("USER") || (loginService.hasPermission("ADMIN"))) {
         <div class="col-md-3">
             <div class="card mb-4 shadow-sm" style="background-color: #f4ecf7;">
                 <img src="assets/cadreserva.jpeg" class="card-img-top" alt="Cadastrar Reserva">
@@ -69,7 +69,7 @@
         </div>
       }
 
-      @if(loginService.hasPermission("USER") || (loginService.hasPermission("USER"))){
+      @if(loginService.hasPermission("USER") || (loginService.hasPermission("ADMIN"))) {
         <div class="col-md-3">
           <div class="card mb-4 shadow-sm" style="background-color: #e6e6fa;">
             <img src="assets/gerenciarClientes.jpeg" class="card-img-top" alt="Gerenciar Clientes">
@@ -108,7 +108,7 @@
         </div>
       }
 
-      @if(loginService.hasPermission("USER") || (loginService.hasPermission("USER"))) {
+      @if(loginService.hasPermission("USER") || (loginService.hasPermission("ADMIN"))) {
         <div class="col-md-3">
           <div class="card mb-4 shadow-sm" style="background-color: #f4ecf7;">
             <img src="assets/gerenciar-reserva.jpeg" class="card-img-top" alt="Gerenciar Reserva">

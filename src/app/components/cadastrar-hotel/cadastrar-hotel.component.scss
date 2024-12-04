@@ -16,7 +16,8 @@
   padding: 15px;
 }
 
-.col-md-6, .col-lg-4 {
+.col-md-6,
+.col-lg-4 {
   padding: 0 15px;
 }
 
@@ -26,12 +27,17 @@
 }
 
 .form-control {
-  background-color: #ffffff !important; /* Garante o fundo branco */
-  border: 1px solid #ccc; /* Adiciona borda cinza */
-  color: #000; /* Garante texto preto */
-  padding: 0.5rem 0.75rem; /* Ajuste do preenchimento interno */
+  background-color: #ffffff !important;
+  /* Garante o fundo branco */
+  border: 1px solid #ccc;
+  /* Adiciona borda cinza */
+  color: #000;
+  /* Garante texto preto */
+  padding: 0.5rem 0.75rem;
+  /* Ajuste do preenchimento interno */
   font-size: 1rem;
-  border-radius: 4px; /* Adiciona bordas arredondadas */
+  border-radius: 4px;
+  /* Adiciona bordas arredondadas */
 }
 
 .btn-primary {
@@ -44,10 +50,10 @@
   margin-bottom: 1rem;
 
   .form-control {
-    border: 1px solid #ccc; /* Adiciona borda padrão */
+    border: 1px solid #ccc;
     padding: 0.5rem 0.75rem;
-    background-color: #ffffff; /* Fundo branco */
-    color: #000; /* Texto preto */
+    background-color: #ffffff;
+    color: #000;
     font-size: 1rem;
   }
 
@@ -61,8 +67,8 @@
     pointer-events: none;
   }
 
-  .form-control:focus + .floating-label,
-  .form-control:not(:placeholder-shown) + .floating-label {
+  .form-control:focus+.floating-label,
+  .form-control:not(:placeholder-shown)+.floating-label {
     top: -0.75rem;
     left: 0.5rem;
     font-size: 0.75rem;

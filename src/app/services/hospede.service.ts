@@ -1,16 +1,19 @@
-import { Injectable } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 import { Hospede } from '../models/hospede.model';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HospedeService {
-  private readonly API = 'http://localhost:8080/hospedes';
+  
+  http = inject(HttpClient);
+  API = environment.SERVIDOR + "/hospedes";
 
-  constructor(private http: HttpClient) {}
+  constructor() {}
 
   
   createHospede(hospede: Hospede): Observable<Hospede> {

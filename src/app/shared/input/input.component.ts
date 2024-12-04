@@ -23,6 +23,7 @@ import { FormsModule } from '@angular/forms';
   `,
   styleUrls: ['./input.component.scss']
 })
+
 export class InputComponent {
   @Input() type = 'text';
   @Input() model: any;
